@@ -16,12 +16,21 @@ export async function importStores(formData: FormData) {
     skip_empty_lines: true,
   });
 
-  for (const row of rows as any[]) {
+  type StoreRow = {
+    categories: string | null;  
+    name: string
+    slug: string
+    logo: string | null
+    affiliate_url: string | null
+    description: string | null
+    is_featured: string
+  }
+  for (const row of rows as StoreRow[]) {
     if (!row.name || !row.slug) continue;
 
     // 1️⃣ Find categories by slug
     const categorySlugs =
-      row.categories && typeof row.categories === "string"
+      typeof row.categories === "string" && row.categories.trim().length > 0
         ? row.categories.split(",").map((c: string) => c.trim())
         : [];
 
