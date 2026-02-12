@@ -38,13 +38,16 @@ export default async function CouponsPage() {
                 </p>
               )}
               <div className="mt-2 flex gap-2">
-                <Link
-                  href={coupon.dealUrl}
-                  target="_blank"
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                  View Deal
-                </Link>
+              {coupon.dealUrl && (
+  <Link
+    href={coupon.dealUrl}
+    target="_blank"
+    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    Get Deal
+  </Link>
+  )}
+
                 <Link
                   href={`/coupons/${coupon.id}`}
                   className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"

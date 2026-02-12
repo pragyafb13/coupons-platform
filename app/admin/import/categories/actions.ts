@@ -17,18 +17,21 @@ export async function importCategories(formData: FormData) {
     skip_empty_lines: true,
   });
 
-  for (const row of rows as any[]) {
+  type CategoryRow = {
+    name: string
+    slug: string
+  }
+  
+  for (const row of rows as CategoryRow[]) {
     if (!row.name || !row.slug) continue;
-
+  
     await prisma.category.upsert({
       where: { slug: row.slug },
       update: { name: row.name },
-      create: {
-        name: row.name,
-        slug: row.slug,
-      },
-    });
+      create: { name: row.name, slug: row.slug }
+    })
   }
+  
 
   revalidatePath("/admin/categories");
   redirect("/admin/categories");
