@@ -5,6 +5,11 @@ import { parse } from "csv-parse/sync";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+type CategoryRow = {
+  name: string;
+  slug: string;
+};
+
 export async function importCategories(formData: FormData) {
   const file = formData.get("file") as File;
 
@@ -17,21 +22,15 @@ export async function importCategories(formData: FormData) {
     skip_empty_lines: true,
   }) as CategoryRow[];
 
-  type CategoryRow = {
-    name: string
-    slug: string
-  }
-  
-  for (const row of rows as CategoryRow[]) {
+  for (const row of rows) {
     if (!row.name || !row.slug) continue;
-  
+
     await prisma.category.upsert({
       where: { slug: row.slug },
       update: { name: row.name },
-      create: { name: row.name, slug: row.slug }
-    })
+      create: { name: row.name, slug: row.slug },
+    });
   }
-  
 
   revalidatePath("/admin/categories");
   redirect("/admin/categories");
