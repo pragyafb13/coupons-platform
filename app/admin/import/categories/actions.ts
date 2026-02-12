@@ -17,7 +17,7 @@ export async function importCategories(formData: FormData) {
     skip_empty_lines: true,
   });
 
-  for (const row of rows) {
+  for (const row of rows as any[]) {
     if (!row.name || !row.slug) continue;
 
     await prisma.category.upsert({

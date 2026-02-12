@@ -17,8 +17,8 @@ export async function importCoupons(formData: FormData) {
     skip_empty_lines: true,
   });
 
-  for (const row of rows as Array<{ title?: string; code?: string; type?: string; deal_url?: string; expiry_date?: string; status?: string; is_verified?: string; storeId?: string; categories?: string }>) {
-  if (!row.title || !row.storeId) continue;
+  for (const row of rows as any[]) {
+    if (!row.title || !row.storeId) continue;
 
   const categorySlugs = row.categories
     ? row.categories.split(",").map((c: string) => c.trim())
