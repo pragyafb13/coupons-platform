@@ -20,9 +20,12 @@ export async function importCoupons(formData: FormData) {
   for (const row of rows as any[]) {
     if (!row.title || !row.storeId) continue;
 
-  const categorySlugs = row.categories
+    const categorySlugs =
+  typeof row.categories === "string" && row.categories.trim().length > 0
     ? row.categories.split(",").map((c: string) => c.trim())
     : [];
+
+  
 
   const categories = await prisma.category.findMany({
     where: {

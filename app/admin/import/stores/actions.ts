@@ -14,7 +14,8 @@ export async function importStores(formData: FormData) {
   const rows = parse(text, {
     columns: true,
     skip_empty_lines: true,
-  });
+  }) as StoreRow[];
+  
 
   type StoreRow = {
     categories: string | null;  

@@ -15,7 +15,7 @@ export async function importCategories(formData: FormData) {
   const rows = parse(text, {
     columns: true,
     skip_empty_lines: true,
-  });
+  }) as CategoryRow[];
 
   type CategoryRow = {
     name: string
