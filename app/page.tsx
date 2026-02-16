@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { Search } from "lucide-react";
 
 export default async function HomePage() {
   const featuredCoupons = await prisma.coupon.findMany({
@@ -16,7 +17,7 @@ export default async function HomePage() {
 
   const featuredStores = await prisma.store.findMany({
     where: { isFeatured: true },
-    take: 8,
+    take: 12,
   });
 
   const [totalCoupons, totalStores] = await Promise.all([
@@ -25,262 +26,233 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-900">
+    <div className="bg-[#fafafa] text-gray-900 min-h-screen">
 
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-extrabold text-indigo-600">
-            DealStack
+      <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b shadow-sm">
+        <div className="max-w-7xl mx-auto h-16 flex items-center justify-between px-6">
+
+          <Link href="/" className="text-2xl font-extrabold tracking-tight">
+            CouponBunch
           </Link>
 
-          <nav className="hidden md:flex gap-8 font-medium">
-            <Link href="/coupons" className="hover:text-indigo-600 transition">
-              Coupons
-            </Link>
-            <Link href="/stores" className="hover:text-indigo-600 transition">
+          {/* search */}
+          <div className="hidden md:flex w-[40%] relative">
+            <input
+              placeholder="Search Amazon, Ajio, Myntra..."
+              className="w-full pl-11 pr-4 py-2 rounded-full border bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Link href="/stores" className="font-medium text-sm hover:text-black">
               Stores
             </Link>
-            <Link href="/categories" className="hover:text-indigo-600 transition">
+            <Link href="/categories" className="font-medium text-sm hover:text-black">
               Categories
             </Link>
-          </nav>
 
-          <Link
-            href="/coupons"
-            className="hidden md:block bg-indigo-600 text-white px-5 py-2 rounded-xl hover:bg-indigo-700 transition shadow-md"
-          >
-            Browse Deals
-          </Link>
+            <Link
+              href="/admin"
+              className="bg-black text-white px-5 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition"
+            >
+              Admin
+            </Link>
+          </div>
         </div>
       </header>
 
       {/* ================= HERO ================= */}
-      <section className="bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-600 text-white py-32 text-center relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
-            India’s Smartest Way to Save Money
+      <section className="relative pt-28 pb-24 overflow-hidden">
+
+        {/* gradient bg */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 opacity-[0.06]" />
+
+        <div className="max-w-7xl mx-auto px-6 text-center relative">
+
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
+            India’s Smartest Way  
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-600">
+              to Save Money Online
+            </span>
           </h1>
 
-          <p className="text-xl text-indigo-100 mb-12">
-            Discover verified coupons from {totalStores}+ stores and
-            unlock instant savings on every purchase.
+          <p className="text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
+            Verified coupons & promo codes from {totalStores}+ stores.
+            Updated daily. 100% working deals.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-5">
+          {/* search big */}
+          <div className="max-w-xl mx-auto relative mb-8">
+            <input
+              placeholder="Search for stores or coupons..."
+              className="w-full h-14 rounded-full border bg-white pl-14 pr-5 text-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+            <Search className="absolute left-5 top-5 text-gray-400" />
+          </div>
+
+          <div className="flex justify-center gap-4 flex-wrap">
             <Link
               href="/coupons"
-              className="bg-white text-indigo-700 px-10 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1"
+              className="bg-black text-white px-8 py-4 rounded-xl font-semibold hover:scale-105 transition"
             >
-              Explore Coupons
+              Browse Coupons
             </Link>
+
             <Link
               href="/stores"
-              className="bg-indigo-800 px-10 py-4 rounded-2xl font-semibold hover:bg-indigo-900 transition"
+              className="border px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition"
             >
-              View Stores
+              Explore Stores
             </Link>
           </div>
 
-          <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 text-indigo-100">
+          {/* stats */}
+          <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
             <div>
-              <div className="text-4xl font-bold">{totalCoupons}+</div>
-              <div>Active Coupons</div>
+              <div className="text-3xl font-bold">{totalCoupons}+</div>
+              <div className="text-gray-500 text-sm">Active Coupons</div>
             </div>
             <div>
-              <div className="text-4xl font-bold">{totalStores}+</div>
-              <div>Trusted Brands</div>
+              <div className="text-3xl font-bold">{totalStores}+</div>
+              <div className="text-gray-500 text-sm">Stores</div>
             </div>
             <div>
-              <div className="text-4xl font-bold">100%</div>
-              <div>Verified Deals</div>
+              <div className="text-3xl font-bold">100%</div>
+              <div className="text-gray-500 text-sm">Verified Deals</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= FEATURED COUPONS ================= */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center mb-14">
-          <h2 className="text-4xl font-bold">
-            Featured Coupons
-          </h2>
-          <Link
-            href="/coupons"
-            className="text-indigo-600 font-semibold hover:underline"
-          >
-            View All →
+      {/* ================= TRENDING COUPONS ================= */}
+      <section className="max-w-7xl mx-auto px-6 py-20">
+        <div className="flex justify-between items-center mb-12">
+          <h2 className="text-3xl font-bold">🔥 Trending Coupons</h2>
+          <Link href="/coupons" className="font-semibold text-indigo-600">
+            View all →
           </Link>
         </div>
 
-        {featuredCoupons.length === 0 ? (
-          <p className="text-center text-gray-500">
-            No featured coupons yet.
-          </p>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredCoupons.map((coupon) => (
-              <div
-                key={coupon.id}
-                className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="font-semibold text-gray-700">
-                      {coupon.store.name}
-                    </span>
-                    {coupon.isVerified && (
-                      <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">
-                        Verified
-                      </span>
-                    )}
-                  </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {featuredCoupons.map((coupon) => (
+            <div
+              key={coupon.id}
+              className="bg-white rounded-3xl border p-6 shadow-sm hover:shadow-xl transition flex flex-col"
+            >
+              <div className="flex justify-between mb-4">
+                <span className="font-semibold text-sm text-gray-700">
+                  {coupon.store.name}
+                </span>
+                {coupon.isVerified && (
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                    verified
+                  </span>
+                )}
+              </div>
 
-                  <h3 className="text-lg font-bold mb-5 group-hover:text-indigo-600 transition">
-                    {coupon.title}
-                  </h3>
+              <h3 className="font-bold text-lg mb-4">
+                {coupon.title}
+              </h3>
 
-                  {coupon.code && (
-                    <div className="font-mono bg-gray-100 border-dashed border-2 border-gray-300 px-4 py-3 rounded-xl text-center mb-6">
-                      {coupon.code}
-                    </div>
-                  )}
+              {coupon.code && (
+                <div className="border-dashed border-2 border-gray-300 rounded-xl p-3 text-center font-mono mb-5">
+                  {coupon.code}
                 </div>
+              )}
 
-                <div className="flex gap-3 mt-auto">
-                  {coupon.dealUrl &&
-                    coupon.dealUrl.startsWith("http") && (
-                      <a
-                        href={coupon.dealUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 bg-indigo-600 text-white text-center py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
-                      >
-                        Get Deal
-                      </a>
-                    )}
-
-                  <Link
-                    href={`/coupons/${coupon.id}`}
-                    className="px-4 py-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition"
+              <div className="flex gap-2 mt-auto">
+                {coupon.dealUrl && (
+                  <a
+                    href={coupon.dealUrl}
+                    target="_blank"
+                    className="flex-1 bg-black text-white py-3 rounded-xl text-center font-semibold"
                   >
-                    Details
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+                    Get Deal
+                  </a>
+                )}
 
-      {/* ================= TRUST SECTION ================= */}
-      <section className="bg-gray-50 py-24">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-16">
-            Why Millions Trust DealStack
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-12">
-            {[
-              {
-                title: "Manually Verified",
-                desc: "Every coupon is checked before publishing.",
-              },
-              {
-                title: "Real-Time Updates",
-                desc: "Expired deals are removed instantly.",
-              },
-              {
-                title: "Fast & Clean",
-                desc: "Lightning fast experience without clutter.",
-              },
-            ].map((item, i) => (
-              <div key={i} className="bg-white p-10 rounded-3xl shadow-md">
-                <h3 className="text-xl font-bold mb-4">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600">
-                  {item.desc}
-                </p>
+                <Link
+                  href={`/coupons/${coupon.id}`}
+                  className="px-4 py-3 bg-gray-100 rounded-xl"
+                >
+                  View
+                </Link>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ================= FEATURED STORES ================= */}
-      {featuredStores.length > 0 && (
-        <section className="py-24 max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16">
+      <section className="bg-white border-y py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">
             Featured Stores
           </h2>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
             {featuredStores.map((store) => (
               <Link
                 key={store.id}
                 href={`/stores/${store.id}`}
-                className="bg-white border border-gray-200 rounded-2xl p-6 text-center hover:shadow-xl transition"
+                className="border rounded-2xl p-6 text-center bg-white hover:shadow-md transition font-semibold"
               >
-                <div className="font-semibold">
-                  {store.name}
-                </div>
+                {store.name}
               </Link>
             ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+      {/* ================= TRUST ================= */}
+      <section className="py-24">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold mb-14">
+            Why users love CouponBunch
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            {[
+              ["Manually Verified", "Every coupon is tested before publishing"],
+              ["Updated Daily", "Fresh deals added every morning"],
+              ["No Fake Codes", "Only working coupons allowed"],
+            ].map(([title, desc]) => (
+              <div key={title} className="bg-white p-10 rounded-3xl shadow-sm">
+                <h3 className="font-bold text-lg mb-3">{title}</h3>
+                <p className="text-gray-600">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ================= CTA ================= */}
-      <section className="bg-indigo-600 text-white py-24 text-center">
-        <h2 className="text-4xl font-bold mb-6">
+      <section className="bg-black text-white py-24 text-center">
+        <h2 className="text-4xl font-bold mb-4">
           Start Saving Today
         </h2>
-        <p className="text-indigo-200 mb-10">
-          Browse top deals from India’s biggest brands.
+        <p className="text-gray-300 mb-8">
+          Join thousands saving money every day
         </p>
+
         <Link
           href="/coupons"
-          className="bg-white text-indigo-600 px-10 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition"
+          className="bg-white text-black px-8 py-4 rounded-xl font-semibold"
         >
-          Explore Now
+          Explore Deals
         </Link>
       </section>
 
       {/* ================= FOOTER ================= */}
-      <footer className="bg-gray-900 text-gray-400 py-14 mt-auto">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-10">
-          <div>
-            <h3 className="text-white text-2xl font-bold mb-4">
-              DealStack
-            </h3>
-            <p>
-              Your trusted platform for verified coupons and
-              unbeatable savings.
-            </p>
+      <footer className="bg-white/70 backdrop-blur-md border-t shadow-sm py-12">
+        <div className="max-w-7xl mx-auto px-6 text-center text-gray-600">
+          <div className="text-xl font-bold mb-3">CouponBunch</div>
+          <p className="mb-6">India's fastest growing coupon platform.</p>
+          <div className="text-sm">
+            © {new Date().getFullYear()} CouponBunch. All rights reserved.
           </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">
-              Quick Links
-            </h4>
-            <ul className="space-y-2">
-              <li><Link href="/coupons">Coupons</Link></li>
-              <li><Link href="/stores">Stores</Link></li>
-              <li><Link href="/categories">Categories</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">
-              Contact
-            </h4>
-            <p>Email: support@dealstack.com</p>
-          </div>
-        </div>
-
-        <div className="text-center mt-10 text-sm text-gray-500">
-          © {new Date().getFullYear()} DealStack. All rights reserved.
         </div>
       </footer>
     </div>
