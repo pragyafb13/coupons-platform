@@ -65,6 +65,9 @@ export default async function HomePage() {
 
       {/* ================= HERO ================= */}
       <section className="relative pt-28 pb-24 overflow-hidden">
+      <div className="absolute top-10 left-10 w-72 h-72 bg-purple-400/20 rounded-full blur-3xl"></div>
+<div className="absolute bottom-10 right-10 w-72 h-72 bg-indigo-400/20 rounded-full blur-3xl"></div>
+
 
         {/* gradient bg */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 opacity-[0.06]" />
@@ -126,6 +129,25 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section className="py-14 bg-white border-y">
+  <div className="max-w-6xl mx-auto px-6">
+    <p className="text-center text-gray-500 mb-8">
+      Trusted by shoppers from top brands
+    </p>
+
+    <div className="flex flex-wrap justify-center gap-10 opacity-70">
+      {featuredStores.map((store) => (
+        <img
+          key={store.id}
+          src={store.logo || "/logos/default.png"}
+          className="h-8 object-contain grayscale hover:grayscale-0 transition"
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+
       {/* ================= TRENDING COUPONS ================= */}
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="flex justify-between items-center mb-12">
@@ -136,53 +158,71 @@ export default async function HomePage() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featuredCoupons.map((coupon) => (
-            <div
-              key={coupon.id}
-              className="bg-white rounded-3xl border p-6 shadow-sm hover:shadow-xl transition flex flex-col"
+  {featuredCoupons.map((coupon) => (
+    <div
+      key={coupon.id}
+      className="group relative bg-white rounded-3xl border border-gray-200 overflow-hidden hover:shadow-2xl transition-all duration-300"
+    >
+
+      {/* TOP IMAGE / BRAND STRIP */}
+      <div className="h-28 bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center relative">
+
+        {coupon.store.logo ? (
+          <img
+            src={coupon.store.logo}
+            alt={coupon.store.name}
+            className="h-12 object-contain bg-white p-2 rounded-xl shadow"
+          />
+        ) : (
+          <div className="text-white font-bold text-lg">
+            {coupon.store.name}
+          </div>
+        )}
+
+        {coupon.isVerified && (
+          <div className="absolute top-3 right-3 bg-white/90 text-green-600 text-xs px-3 py-1 rounded-full font-semibold shadow">
+            verified
+          </div>
+        )}
+      </div>
+
+      {/* CONTENT */}
+      <div className="p-6 flex flex-col h-full">
+
+        <h3 className="font-bold text-lg mb-3 group-hover:text-indigo-600 transition">
+          {coupon.title}
+        </h3>
+
+        {coupon.code && (
+          <div className="border-2 border-dashed border-gray-300 rounded-xl py-3 text-center font-mono text-lg mb-5 bg-gray-50">
+            {coupon.code}
+          </div>
+        )}
+
+        {/* buttons */}
+        <div className="flex gap-2 mt-auto">
+          {coupon.dealUrl && (
+            <a
+              href={coupon.dealUrl}
+              target="_blank"
+              className="flex-1 bg-black text-white py-3 rounded-xl text-center font-semibold hover:scale-105 transition"
             >
-              <div className="flex justify-between mb-4">
-                <span className="font-semibold text-sm text-gray-700">
-                  {coupon.store.name}
-                </span>
-                {coupon.isVerified && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                    verified
-                  </span>
-                )}
-              </div>
+              Get Deal
+            </a>
+          )}
 
-              <h3 className="font-bold text-lg mb-4">
-                {coupon.title}
-              </h3>
-
-              {coupon.code && (
-                <div className="border-dashed border-2 border-gray-300 rounded-xl p-3 text-center font-mono mb-5">
-                  {coupon.code}
-                </div>
-              )}
-
-              <div className="flex gap-2 mt-auto">
-                {coupon.dealUrl && (
-                  <a
-                    href={coupon.dealUrl}
-                    target="_blank"
-                    className="flex-1 bg-black text-white py-3 rounded-xl text-center font-semibold"
-                  >
-                    Get Deal
-                  </a>
-                )}
-
-                <Link
-                  href={`/coupons/${coupon.id}`}
-                  className="px-4 py-3 bg-gray-100 rounded-xl"
-                >
-                  View
-                </Link>
-              </div>
-            </div>
-          ))}
+          <Link
+            href={`/coupons/${coupon.id}`}
+            className="px-4 py-3 bg-gray-100 rounded-xl hover:bg-gray-200"
+          >
+            View
+          </Link>
         </div>
+      </div>
+    </div>
+  ))}
+</div>
+
       </section>
 
       {/* ================= FEATURED STORES ================= */}

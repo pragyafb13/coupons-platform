@@ -21,6 +21,7 @@ model Store {
   categories   CategoryStore[]
   coupons      Coupon[]
 
+
   @@index([slug])
   @@map("stores")
 }
