@@ -17,13 +17,9 @@ export default async function Footer() {
           name: true,
           slug: true,
         },
-      }).catch(() => [] as Array<{ id: string; name: string; slug: string }>),
-      // Count all coupons for display
-      prisma.coupon.count().catch((err) => {
-        console.error("Error counting coupons in footer:", err);
-        return 0;
       }),
-      prisma.store.count().catch(() => 0),
+      prisma.coupon.count(),
+      prisma.store.count(),
     ]);
     
     categories = categoriesData;

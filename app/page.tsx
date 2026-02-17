@@ -28,13 +28,11 @@ export default async function HomePage() {
   let totalStores = 0;
 
   try {
-    [categories, featuredCoupons, featuredStores, totalCoupons, totalStores] = await Promise.all([
+    // Fetch all data without individual .catch() to see real errors
+    const [categoriesResult, featuredCouponsResult, featuredStoresResult, totalCouponsResult, totalStoresResult] = await Promise.all([
       prisma.category.findMany({
         take: 6,
         orderBy: { createdAt: "desc" },
-      }).catch((err) => {
-        console.error("Error fetching categories:", err);
-        return [];
       }),
       prisma.coupon.findMany({
         where: {
@@ -43,27 +41,20 @@ export default async function HomePage() {
         include: { store: true },
         orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
         take: 8,
-      }).catch((err) => {
-        console.error("Error fetching featured coupons:", err);
-        return [];
       }),
       prisma.store.findMany({
         take: 12,
         orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
-      }).catch((err) => {
-        console.error("Error fetching featured stores:", err);
-        return [];
       }),
-      // Count all coupons (not just ACTIVE) for display
-      prisma.coupon.count().catch((err) => {
-        console.error("Error counting coupons:", err);
-        return 0;
-      }),
-      prisma.store.count().catch((err) => {
-        console.error("Error counting stores:", err);
-        return 0;
-      }),
+      prisma.coupon.count(),
+      prisma.store.count(),
     ]);
+    
+    categories = categoriesResult;
+    featuredCoupons = featuredCouponsResult;
+    featuredStores = featuredStoresResult;
+    totalCoupons = totalCouponsResult;
+    totalStores = totalStoresResult;
     
     // Log results for debugging
     console.log("Homepage data fetched:", {
