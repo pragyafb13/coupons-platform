@@ -1,60 +1,136 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-
-async function createCategory(formData: FormData) {
-  "use server"; // ✅ put it INSIDE the function
-
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-
-  await prisma.category.create({
-    data: { name, slug },
-  });
-
-  revalidatePath("/admin/categories");
-}
+import { createCategory, deleteCategory } from "./actions";
+import Link from "next/link";
 
 export default async function AdminCategoriesPage() {
-  const categories = await prisma.category.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let categories: Array<{ id: string; name: string; slug: string }> = [];
+
+  try {
+    categories = await prisma.category.findMany({
+      orderBy: { name: "asc" },
+    });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    categories = [];
+  }
 
   return (
-    <div className="max-w-3xl mx-auto py-12 space-y-8">
-      <h1 className="text-2xl font-bold">Manage Categories</h1>
-
-      <form action={createCategory} className="space-y-4">
-        <input
-          name="name"
-          placeholder="Category Name"
-          required
-          className="input"
-        />
-
-        <input
-          name="slug"
-          placeholder="category-slug"
-          required
-          className="input"
-        />
-
-        <button className="btn-primary w-full">
-          Add Category
-        </button>
-      </form>
-
-      <div className="space-y-4">
-        {categories.map((cat) => (
-          <div
-            key={cat.id}
-            className="p-4 border rounded flex justify-between"
-          >
-            <span>{cat.name}</span>
-            <span className="text-gray-500 text-sm">
-              {cat.slug}
-            </span>
+    <div className="max-w-6xl mx-auto py-8">
+      <div className="bg-white border shadow-sm rounded-2xl p-10 space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Manage Categories</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Create, edit, and delete product categories
+            </p>
           </div>
-        ))}
+        </div>
+
+        {/* Create Form */}
+        <div className="border-t border-gray-200 pt-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Create New Category</h2>
+          <form action={createCategory} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="name"
+                  placeholder="e.g., Electronics"
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Slug <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="slug"
+                  placeholder="e.g., electronics"
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="bg-black text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-sm"
+            >
+              Create Category
+            </button>
+          </form>
+        </div>
+
+        {/* Categories List */}
+        <div className="border-t border-gray-200 pt-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            All Categories ({categories.length})
+          </h2>
+
+          {categories.length === 0 ? (
+            <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-gray-500">No categories created yet.</p>
+            </div>
+          ) : (
+            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="text-left px-6 py-4 font-semibold text-gray-700">Name</th>
+                    <th className="text-left px-6 py-4 font-semibold text-gray-700">Slug</th>
+                    <th className="text-left px-6 py-4 font-semibold text-gray-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.map((cat) => (
+                    <tr
+                      key={cat.id}
+                      className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{cat.name}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <code className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                          {cat.slug}
+                        </code>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-4">
+                          <Link
+                            href={`/admin/categories/${cat.id}/edit`}
+                            className="text-sm font-medium text-blue-600 hover:text-blue-800 transition"
+                          >
+                            Edit
+                          </Link>
+                          <form action={deleteCategory} className="inline">
+                            <input type="hidden" name="id" value={cat.id} />
+                            <button
+                              type="submit"
+                              className="text-sm font-medium text-red-600 hover:text-red-800 transition"
+                              onClick={(e) => {
+                                if (!confirm(`Are you sure you want to delete "${cat.name}"? This will remove all category associations.`)) {
+                                  e.preventDefault();
+                                }
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

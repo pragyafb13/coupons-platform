@@ -46,6 +46,10 @@ export async function updateStore(formData: FormData) {
   const id = formData.get("id") as string;
   const name = formData.get("name") as string;
   const slug = formData.get("slug") as string;
+  const logo = formData.get("logo") as string | null;
+  const description = formData.get("description") as string | null;
+  const affiliateUrl = formData.get("affiliateUrl") as string | null;
+  const isFeatured = formData.get("isFeatured") === "on";
 
   const categoryIds = formData.getAll("categoryIds") as string[];
 
@@ -57,6 +61,10 @@ export async function updateStore(formData: FormData) {
     data: {
       name,
       slug,
+      logo: logo || null,
+      description: description || null,
+      affiliateUrl: affiliateUrl || null,
+      isFeatured,
     },
   });
 
