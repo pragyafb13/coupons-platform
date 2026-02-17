@@ -70,7 +70,7 @@ export default async function CouponsPage() {
                     <div className="flex flex-wrap gap-1">
                       {coupon.categories.map((cc) => (
                         <span
-                          key={cc.categoryId}
+                          key={cc.category.id}
                           className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
                         >
                           {cc.category.name}
