@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Header from "./Header";
 
 export default async function HeaderWrapper() {
-  let categories = [];
+  let categories: Array<{ id: string; name: string; slug: string }> = [];
   
   try {
     categories = await prisma.category.findMany({
