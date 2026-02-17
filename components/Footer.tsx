@@ -8,8 +8,26 @@ export default async function Footer() {
   let totalStores = 0;
 
   try {
-    const [categoriesData, couponsCount, storesCount] = await Promise.all([
-      prisma.category.findMany({
+    // Fetch sequentially to reduce connection pool pressure
+    let couponsCount = 0;
+    let storesCount = 0;
+    
+    try {
+      couponsCount = await prisma.coupon.count();
+    } catch (err) {
+      console.error("Error counting coupons in footer:", err);
+    }
+    
+    try {
+      storesCount = await prisma.store.count();
+    } catch (err) {
+      console.error("Error counting stores in footer:", err);
+    }
+    
+    // Fetch categories separately
+    let categoriesData: Array<{ id: string; name: string; slug: string }> = [];
+    try {
+      categoriesData = await prisma.category.findMany({
         take: 8,
         orderBy: { name: "asc" },
         select: {
@@ -17,10 +35,10 @@ export default async function Footer() {
           name: true,
           slug: true,
         },
-      }),
-      prisma.coupon.count(),
-      prisma.store.count(),
-    ]);
+      });
+    } catch (err) {
+      console.error("Error fetching categories in footer:", err);
+    }
     
     categories = categoriesData;
     totalCoupons = couponsCount;

@@ -28,10 +28,25 @@ export default async function HomePage() {
   let totalStores = 0;
 
   try {
-    // Fetch all data with detailed error handling
-    console.log("Starting homepage data fetch...");
+    // Fetch data sequentially to avoid connection pool exhaustion
+    // First, get counts (simpler queries)
+    let totalCouponsResult = 0;
+    let totalStoresResult = 0;
     
-    const [categoriesResult, featuredCouponsResult, featuredStoresResult, totalCouponsResult, totalStoresResult] = await Promise.all([
+    try {
+      totalCouponsResult = await prisma.coupon.count();
+    } catch (err) {
+      console.error("❌ Error counting coupons:", err);
+    }
+    
+    try {
+      totalStoresResult = await prisma.store.count();
+    } catch (err) {
+      console.error("❌ Error counting stores:", err);
+    }
+    
+    // Then fetch lists in parallel (but fewer queries)
+    const [categoriesResult, featuredCouponsResult, featuredStoresResult] = await Promise.all([
       prisma.category.findMany({
         take: 6,
         orderBy: { createdAt: "desc" },
@@ -57,14 +72,6 @@ export default async function HomePage() {
         console.error("❌ Error fetching featured stores:", err);
         return [];
       }),
-      prisma.coupon.count().catch((err) => {
-        console.error("❌ Error counting coupons:", err);
-        return 0;
-      }),
-      prisma.store.count().catch((err) => {
-        console.error("❌ Error counting stores:", err);
-        return 0;
-      }),
     ]);
     
     categories = categoriesResult;
@@ -82,18 +89,6 @@ export default async function HomePage() {
       totalStores,
     });
     
-    // Also log raw counts for debugging
-    if (totalCoupons === 0) {
-      console.warn("⚠️ WARNING: totalCoupons is 0 - checking if database has any coupons...");
-      const allCouponsCheck = await prisma.coupon.findMany({ take: 1 }).catch(() => []);
-      console.log("All coupons check (any status):", allCouponsCheck.length);
-    }
-    
-    if (totalStores === 0) {
-      console.warn("⚠️ WARNING: totalStores is 0 - checking if database has any stores...");
-      const allStoresCheck = await prisma.store.findMany({ take: 1 }).catch(() => []);
-      console.log("All stores check:", allStoresCheck.length);
-    }
   } catch (error) {
     console.error("❌ CRITICAL: Error fetching homepage data:", error);
     console.error("Error details:", {
