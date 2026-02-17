@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import Image from "next/image";
-import { prisma } from "@/lib/prisma";
+import { prisma, queuedQuery } from "@/lib/prisma";
 import { Flame, Sparkles, Shield, TrendingUp, Star, CheckCircle2, Zap } from "lucide-react";
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
@@ -10,11 +10,11 @@ export default async function HomePage() {
   // Fetch banners with error handling in case Banner table doesn't exist
   let banners: any[] = [];
   try {
-    banners = await prisma.banner.findMany({
+    banners = await queuedQuery(() => prisma.banner.findMany({
       where: { isActive: true },
       orderBy: { position: "asc" },
       take: 4,
-    });
+    }));
   } catch (error) {
     // If Banner table doesn't exist or there's an error, use empty array
     console.error("Error fetching banners:", error);
@@ -33,46 +33,53 @@ export default async function HomePage() {
     let totalCouponsResult = 0;
     let totalStoresResult = 0;
     
+    // Fetch ALL queries sequentially to prevent connection pool exhaustion
     try {
-      totalCouponsResult = await prisma.coupon.count();
+      totalCouponsResult = await queuedQuery(() => prisma.coupon.count());
     } catch (err) {
       console.error("❌ Error counting coupons:", err);
     }
     
     try {
-      totalStoresResult = await prisma.store.count();
+      totalStoresResult = await queuedQuery(() => prisma.store.count());
     } catch (err) {
       console.error("❌ Error counting stores:", err);
     }
     
-    // Then fetch lists in parallel (but fewer queries)
-    const [categoriesResult, featuredCouponsResult, featuredStoresResult] = await Promise.all([
-      prisma.category.findMany({
+    // Fetch lists sequentially (one at a time)
+    let categoriesResult: any[] = [];
+    try {
+      categoriesResult = await queuedQuery(() => prisma.category.findMany({
         take: 6,
         orderBy: { createdAt: "desc" },
-      }).catch((err) => {
-        console.error("❌ Error fetching categories:", err);
-        return [];
-      }),
-      prisma.coupon.findMany({
+      }));
+    } catch (err) {
+      console.error("❌ Error fetching categories:", err);
+    }
+    
+    let featuredCouponsResult: any[] = [];
+    try {
+      featuredCouponsResult = await queuedQuery(() => prisma.coupon.findMany({
         where: {
           status: "ACTIVE",
         },
         include: { store: true },
         orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
         take: 8,
-      }).catch((err) => {
-        console.error("❌ Error fetching featured coupons:", err);
-        return [];
-      }),
-      prisma.store.findMany({
+      }));
+    } catch (err) {
+      console.error("❌ Error fetching featured coupons:", err);
+    }
+    
+    let featuredStoresResult: any[] = [];
+    try {
+      featuredStoresResult = await queuedQuery(() => prisma.store.findMany({
         take: 12,
         orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
-      }).catch((err) => {
-        console.error("❌ Error fetching featured stores:", err);
-        return [];
-      }),
-    ]);
+      }));
+    } catch (err) {
+      console.error("❌ Error fetching featured stores:", err);
+    }
     
     categories = categoriesResult;
     featuredCoupons = featuredCouponsResult;

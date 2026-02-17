@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, queuedQuery } from "@/lib/prisma";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 
 export default async function Footer() {
@@ -13,13 +13,13 @@ export default async function Footer() {
     let storesCount = 0;
     
     try {
-      couponsCount = await prisma.coupon.count();
+      couponsCount = await queuedQuery(() => prisma.coupon.count());
     } catch (err) {
       console.error("Error counting coupons in footer:", err);
     }
     
     try {
-      storesCount = await prisma.store.count();
+      storesCount = await queuedQuery(() => prisma.store.count());
     } catch (err) {
       console.error("Error counting stores in footer:", err);
     }
@@ -27,7 +27,7 @@ export default async function Footer() {
     // Fetch categories separately
     let categoriesData: Array<{ id: string; name: string; slug: string }> = [];
     try {
-      categoriesData = await prisma.category.findMany({
+      categoriesData = await queuedQuery(() => prisma.category.findMany({
         take: 8,
         orderBy: { name: "asc" },
         select: {
@@ -35,7 +35,7 @@ export default async function Footer() {
           name: true,
           slug: true,
         },
-      });
+      }));
     } catch (err) {
       console.error("Error fetching categories in footer:", err);
     }
