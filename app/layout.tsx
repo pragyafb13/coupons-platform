@@ -5,7 +5,7 @@ import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Coupons Platform - Save Big with Verified Coupons & Promo Codes",
+  title: "DealStack - Save Big with Verified Coupons & Promo Codes",
   description: "Discover the best coupons, promo codes and exclusive deals updated daily. Save more on every purchase.",
 };
 

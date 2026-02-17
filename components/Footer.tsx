@@ -29,9 +29,9 @@ export default async function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-red-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">C</span>
+                <span className="text-white font-bold text-sm">D</span>
               </div>
-              <h2 className="text-xl font-bold text-white">CouponBunch</h2>
+              <h2 className="text-xl font-bold text-white">DealStack</h2>
             </div>
             <p className="text-sm text-gray-400 mb-4 leading-relaxed">
               Discover the best coupons, promo codes and exclusive deals
@@ -147,7 +147,7 @@ export default async function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-400 text-center md:text-left">
-              © {new Date().getFullYear()} CouponBunch. All rights reserved.
+              © {new Date().getFullYear()} DealStack. All rights reserved.
             </div>
             <div className="flex items-center gap-6 text-sm text-gray-400">
               <Link href="/privacy-policy" className="hover:text-yellow-400 transition">
