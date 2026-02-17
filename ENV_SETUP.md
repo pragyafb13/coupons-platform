@@ -6,6 +6,10 @@ To make login work, you need to set the following environment variables in your 
 
 ### 1. Database
 - `DATABASE_URL` - Your PostgreSQL connection string
+  - **Important**: For Vercel deployments, use a **connection pooler URL** (not direct connection)
+  - If using Neon, Supabase, or similar services, they provide a pooled connection URL
+  - Example format: `postgresql://user:pass@host:port/db?pgbouncer=true&connection_limit=1`
+  - This prevents "MaxClientsInSessionMode" errors during build/prerendering
 
 ### 2. NextAuth Authentication
 - `AUTH_SECRET` - A random secret string (generate with: `openssl rand -base64 32`)
