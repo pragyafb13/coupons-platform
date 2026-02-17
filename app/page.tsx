@@ -28,11 +28,16 @@ export default async function HomePage() {
   let totalStores = 0;
 
   try {
-    // Fetch all data without individual .catch() to see real errors
+    // Fetch all data with detailed error handling
+    console.log("Starting homepage data fetch...");
+    
     const [categoriesResult, featuredCouponsResult, featuredStoresResult, totalCouponsResult, totalStoresResult] = await Promise.all([
       prisma.category.findMany({
         take: 6,
         orderBy: { createdAt: "desc" },
+      }).catch((err) => {
+        console.error("❌ Error fetching categories:", err);
+        return [];
       }),
       prisma.coupon.findMany({
         where: {
@@ -41,13 +46,25 @@ export default async function HomePage() {
         include: { store: true },
         orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
         take: 8,
+      }).catch((err) => {
+        console.error("❌ Error fetching featured coupons:", err);
+        return [];
       }),
       prisma.store.findMany({
         take: 12,
         orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
+      }).catch((err) => {
+        console.error("❌ Error fetching featured stores:", err);
+        return [];
       }),
-      prisma.coupon.count(),
-      prisma.store.count(),
+      prisma.coupon.count().catch((err) => {
+        console.error("❌ Error counting coupons:", err);
+        return 0;
+      }),
+      prisma.store.count().catch((err) => {
+        console.error("❌ Error counting stores:", err);
+        return 0;
+      }),
     ]);
     
     categories = categoriesResult;
@@ -57,15 +74,32 @@ export default async function HomePage() {
     totalStores = totalStoresResult;
     
     // Log results for debugging
-    console.log("Homepage data fetched:", {
+    console.log("✅ Homepage data fetched successfully:", {
       categories: categories.length,
       featuredCoupons: featuredCoupons.length,
       featuredStores: featuredStores.length,
       totalCoupons,
       totalStores,
     });
+    
+    // Also log raw counts for debugging
+    if (totalCoupons === 0) {
+      console.warn("⚠️ WARNING: totalCoupons is 0 - checking if database has any coupons...");
+      const allCouponsCheck = await prisma.coupon.findMany({ take: 1 }).catch(() => []);
+      console.log("All coupons check (any status):", allCouponsCheck.length);
+    }
+    
+    if (totalStores === 0) {
+      console.warn("⚠️ WARNING: totalStores is 0 - checking if database has any stores...");
+      const allStoresCheck = await prisma.store.findMany({ take: 1 }).catch(() => []);
+      console.log("All stores check:", allStoresCheck.length);
+    }
   } catch (error) {
-    console.error("Error fetching homepage data:", error);
+    console.error("❌ CRITICAL: Error fetching homepage data:", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     // Use default values if queries fail
     categories = [];
     featuredCoupons = [];
