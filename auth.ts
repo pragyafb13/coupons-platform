@@ -9,23 +9,38 @@ const GITHUB_ID = process.env.GITHUB_ID;
 const GITHUB_SECRET = process.env.GITHUB_SECRET;
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL || process.env.AUTH_URL;
 
-// Throw errors if required variables are missing (NextAuth will show Configuration error)
+// Log environment variable status for debugging
+if (process.env.NODE_ENV === "development") {
+  console.log("🔐 Auth Configuration Check:", {
+    hasAUTH_SECRET: !!AUTH_SECRET,
+    hasNEXTAUTH_SECRET: !!process.env.NEXTAUTH_SECRET,
+    hasGITHUB_ID: !!GITHUB_ID,
+    hasGITHUB_SECRET: !!GITHUB_SECRET,
+    hasNEXTAUTH_URL: !!NEXTAUTH_URL,
+    GITHUB_ID_length: GITHUB_ID?.length || 0,
+    AUTH_SECRET_length: AUTH_SECRET?.length || 0,
+  });
+}
+
+// Validate required variables - throw errors only if truly missing
+const missingVars: string[] = [];
 if (!AUTH_SECRET) {
-  throw new Error(
-    "❌ AUTH_SECRET or NEXTAUTH_SECRET is missing! Please set it in your Vercel environment variables."
-  );
+  missingVars.push("AUTH_SECRET or NEXTAUTH_SECRET");
 }
-
 if (!GITHUB_ID) {
-  throw new Error(
-    "❌ GITHUB_ID is missing! Please set it in your Vercel environment variables."
-  );
+  missingVars.push("GITHUB_ID");
+}
+if (!GITHUB_SECRET) {
+  missingVars.push("GITHUB_SECRET");
 }
 
-if (!GITHUB_SECRET) {
-  throw new Error(
-    "❌ GITHUB_SECRET is missing! Please set it in your Vercel environment variables."
-  );
+if (missingVars.length > 0) {
+  const errorMessage = `❌ Missing required environment variables: ${missingVars.join(", ")}. Please set them in your Vercel environment variables and redeploy.`;
+  console.error(errorMessage);
+  // Only throw in production to prevent silent failures
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(errorMessage);
+  }
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -33,14 +48,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // See: https://next-auth.js.org/adapters/prisma
   adapter: PrismaAdapter(prisma) as any, // `as any` is a workaround for type mismatch issues
 
-  secret: AUTH_SECRET,
+  secret: AUTH_SECRET || "temp-secret-change-in-production", // Fallback for development only
   
   trustHost: true, // Required for Vercel deployments
 
   providers: [
     GitHub({
-      clientId: GITHUB_ID,
-      clientSecret: GITHUB_SECRET,
+      clientId: GITHUB_ID || "",
+      clientSecret: GITHUB_SECRET || "",
     }),
   ],
 
