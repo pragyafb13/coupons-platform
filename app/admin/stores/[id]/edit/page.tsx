@@ -29,7 +29,7 @@ export default async function EditStorePage({
   });
 
   const selectedCategoryIds = store.categories.map(
-    (c) => c.categoryId
+    (c) => c.category.id
   );
 
   return (
