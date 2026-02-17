@@ -16,10 +16,11 @@ export default async function AdminBannersPage() {
   } catch (error) {
     console.error("Error fetching banners:", error);
     // Return empty array if there's an error
+    banners = [];
   }
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Banners</h2>

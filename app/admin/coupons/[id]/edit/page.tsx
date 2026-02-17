@@ -178,16 +178,16 @@ export default async function EditCouponPage({
                 {allCategories.map((cat) => (
                   <label
                     key={cat.id}
-                    className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-white transition"
+                    className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-white transition"
                   >
                     <input
                       type="checkbox"
                       name="categoryIds"
                       value={cat.id}
                       defaultChecked={selectedCategoryIds.includes(cat.id)}
-                      className="w-4 h-4 text-black border-gray-300 rounded focus:ring-2 focus:ring-black"
+                      className="w-4 h-4 text-black border-gray-300 rounded focus:ring-2 focus:ring-black flex-shrink-0 mt-0.5"
                     />
-                    <span className="text-sm text-gray-700">{cat.name}</span>
+                    <span className="text-sm text-gray-700 flex-1">{cat.name}</span>
                   </label>
                 ))}
               </div>
