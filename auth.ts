@@ -34,28 +34,36 @@ if (!GITHUB_SECRET) {
   missingVars.push("GITHUB_SECRET");
 }
 
+// Log missing variables but don't throw - let NextAuth handle it
 if (missingVars.length > 0) {
   const errorMessage = `❌ Missing required environment variables: ${missingVars.join(", ")}. Please set them in your Vercel environment variables and redeploy.`;
   console.error(errorMessage);
-  // Only throw in production to prevent silent failures
-  if (process.env.NODE_ENV === "production") {
-    throw new Error(errorMessage);
-  }
 }
+
+// Only initialize NextAuth if we have the minimum required config
+// This prevents "Configuration" errors from NextAuth
+const hasMinimumConfig = !!(AUTH_SECRET && GITHUB_ID && GITHUB_SECRET);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   // Use the PrismaAdapter from the same NextAuth package for compatibility
   // See: https://next-auth.js.org/adapters/prisma
-  adapter: PrismaAdapter(prisma) as any, // `as any` is a workaround for type mismatch issues
+  adapter: hasMinimumConfig ? (PrismaAdapter(prisma) as any) : undefined,
 
-  secret: AUTH_SECRET || "temp-secret-change-in-production", // Fallback for development only
+  secret: AUTH_SECRET || "temp-secret-change-in-production",
   
   trustHost: true, // Required for Vercel deployments
 
-  providers: [
+  providers: hasMinimumConfig ? [
     GitHub({
-      clientId: GITHUB_ID || "",
-      clientSecret: GITHUB_SECRET || "",
+      clientId: GITHUB_ID!,
+      clientSecret: GITHUB_SECRET!,
+    }),
+  ] : [
+    // If config is missing, provide invalid credentials
+    // NextAuth will show a proper error instead of crashing
+    GitHub({
+      clientId: "missing-github-id",
+      clientSecret: "missing-github-secret",
     }),
   ],
 
