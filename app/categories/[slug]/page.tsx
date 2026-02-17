@@ -1,25 +1,18 @@
 import { prisma } from "@/lib/prisma";
-import { CouponStatus } from "@prisma/client";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
-export default async function CategoryDetailPage({
+export default async function CategoryPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
 
-  if (!slug) notFound();
-
   const category = await prisma.category.findUnique({
     where: { slug },
     include: {
       coupons: {
-        where: {
-          coupon: {
-            status: "ACTIVE",
-          },
-        },
         include: {
           coupon: {
             include: {
@@ -28,35 +21,76 @@ export default async function CategoryDetailPage({
           },
         },
       },
-      stores: true,
+      stores: {
+        include: {
+          store: {
+            include: {
+              coupons: {
+                where: {
+                  status: "ACTIVE",
+                  isActive: true,
+                },
+                include: {
+                  store: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 
   if (!category) notFound();
+
+  // Direct category coupons
+  const directCoupons =
+    category.coupons.map((c) => c.coupon);
+
+  // Coupons via stores
+  const storeCoupons =
+    category.stores.flatMap((cs) =>
+      cs.store.coupons
+    );
+
+  // Merge + remove duplicates
+  const allCoupons = [
+    ...directCoupons,
+    ...storeCoupons,
+  ].filter(
+    (value, index, self) =>
+      index ===
+      self.findIndex((c) => c.id === value.id)
+  );
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-16 space-y-12">
-      <h1 className="text-4xl font-bold">
+    <div className="max-w-6xl mx-auto px-6 py-16">
+      <h1 className="text-3xl font-bold mb-8">
         {category.name} Coupons
       </h1>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {category.coupons.map((coupon) => (
-          <div
-            key={coupon.id}
-            className="border p-6 rounded-2xl shadow"
-          >
-            <div className="font-semibold mb-2">
-              {coupon.coupon.store.name}
-            </div>
-            <div className="text-lg font-bold mb-4">
-              {coupon.coupon.title}
-            </div>
-            {coupon.coupon.code && (
-              <div className="bg-gray-100 p-2 rounded mb-4 font-mono">
-                {coupon.coupon.code}
-              </div>
-            )}
-          </div>
+      {allCoupons.length === 0 && (
+        <p className="text-gray-500">
+          No active coupons found in this category.
+        </p>
+      )}
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {allCoupons.map((coupon) => (
+          <Link
+          key={coupon.id}
+          href={`/coupons/${coupon.id}`}
+          className="block border rounded-xl p-6 hover:shadow-lg hover:-translate-y-1 transition cursor-pointer"
+        >
+          <h3 className="font-semibold mb-2">
+            {coupon.title}
+          </h3>
+        
+          <p className="text-sm text-gray-500">
+            {coupon.store.name}
+          </p>
+        </Link>
+        
         ))}
       </div>
     </div>

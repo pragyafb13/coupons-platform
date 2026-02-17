@@ -1,80 +1,166 @@
-"use client";
-
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 
-export default function Footer() {
+export default async function Footer() {
+  const categories = await prisma.category.findMany({
+    take: 8,
+    orderBy: { name: "asc" },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+    },
+  });
+
+  const stats = await Promise.all([
+    prisma.coupon.count({ where: { status: "ACTIVE", isActive: true } }),
+    prisma.store.count(),
+  ]);
+
+  const [totalCoupons, totalStores] = stats;
+
   return (
-    <footer className="sticky bottom-0 z-40 w-full border-t bg-white/70 backdrop-blur-md shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-10">
+    <footer className="bg-gray-900 text-gray-300 border-t border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Top grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h2 className="text-xl font-bold">CouponBunch</h2>
-            <p className="text-sm text-gray-600 mt-3">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-red-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">C</span>
+              </div>
+              <h2 className="text-xl font-bold text-white">CouponBunch</h2>
+            </div>
+            <p className="text-sm text-gray-400 mb-4 leading-relaxed">
               Discover the best coupons, promo codes and exclusive deals
               updated daily. Save more on every purchase.
             </p>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="font-semibold mb-3">Company</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>
-                <Link href="/about">About Us</Link>
-              </li>
-              <li>
-                <Link href="/contact">Contact</Link>
-              </li>
-              <li>
-                <Link href="/advertise">Advertise</Link>
-              </li>
-              <li>
-                <Link href="/submit-coupon">Submit Coupon</Link>
-              </li>
-            </ul>
+            <div className="flex items-center gap-4">
+              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Facebook">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Twitter">
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Instagram">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Email">
+                <Mail className="h-5 w-5" />
+              </a>
+            </div>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="font-semibold mb-3">Categories</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
+            <h3 className="font-semibold text-white mb-4">Popular Categories</h3>
+            <ul className="space-y-2 text-sm">
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <li key={category.id}>
+                    <Link 
+                      href={`/categories/${category.slug}`}
+                      className="text-gray-400 hover:text-yellow-400 transition"
+                    >
+                      {category.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-400">No categories available</li>
+              )}
               <li>
-                <Link href="/category/fashion">Fashion</Link>
-              </li>
-              <li>
-                <Link href="/category/electronics">Electronics</Link>
-              </li>
-              <li>
-                <Link href="/category/food">Food</Link>
-              </li>
-              <li>
-                <Link href="/category/travel">Travel</Link>
+                <Link 
+                  href="/categories"
+                  className="text-gray-400 hover:text-yellow-400 transition font-medium"
+                >
+                  View All →
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Company */}
           <div>
-            <h3 className="font-semibold mb-3">Legal</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
+            <h3 className="font-semibold text-white mb-4">Company</h3>
+            <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/privacy-policy">Privacy Policy</Link>
+                <Link href="/about" className="text-gray-400 hover:text-yellow-400 transition">
+                  About Us
+                </Link>
               </li>
               <li>
-                <Link href="/terms">Terms & Conditions</Link>
+                <Link href="/contact" className="text-gray-400 hover:text-yellow-400 transition">
+                  Contact
+                </Link>
               </li>
               <li>
-                <Link href="/disclaimer">Disclaimer</Link>
+                <Link href="/advertise" className="text-gray-400 hover:text-yellow-400 transition">
+                  Advertise
+                </Link>
+              </li>
+              <li>
+                <Link href="/submit-coupon" className="text-gray-400 hover:text-yellow-400 transition">
+                  Submit Coupon
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Stats & Legal */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Quick Stats</h3>
+            <div className="space-y-3 mb-6">
+              <div>
+                <div className="text-2xl font-bold text-yellow-400">{totalCoupons}+</div>
+                <div className="text-sm text-gray-400">Active Coupons</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-yellow-400">{totalStores}+</div>
+                <div className="text-sm text-gray-400">Top Stores</div>
+              </div>
+            </div>
+            <h3 className="font-semibold text-white mb-4 mt-6">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/privacy-policy" className="text-gray-400 hover:text-yellow-400 transition">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-gray-400 hover:text-yellow-400 transition">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className="text-gray-400 hover:text-yellow-400 transition">
+                  Disclaimer
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="border-t mt-8 pt-6 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} CouponBunch. All rights reserved.
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-sm text-gray-400 text-center md:text-left">
+              © {new Date().getFullYear()} CouponBunch. All rights reserved.
+            </div>
+            <div className="flex items-center gap-6 text-sm text-gray-400">
+              <Link href="/privacy-policy" className="hover:text-yellow-400 transition">
+                Privacy
+              </Link>
+              <Link href="/terms" className="hover:text-yellow-400 transition">
+                Terms
+              </Link>
+              <Link href="/contact" className="hover:text-yellow-400 transition">
+                Contact
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
