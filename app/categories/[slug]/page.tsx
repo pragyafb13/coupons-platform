@@ -15,6 +15,12 @@ export default async function CategoryPage({
     where: { slug },
     include: {
       coupons: {
+        where: {
+          coupon: {
+            status: "ACTIVE",
+            isActive: true,
+          },
+        },
         include: {
           coupon: {
             include: {
@@ -27,21 +33,19 @@ export default async function CategoryPage({
         include: {
           store: {
             include: {
-              coupons: {
-                where: {
-                  status: "ACTIVE",
-                  isActive: true,
-                },
-                include: {
-                  store: true,
-                },
-              },
               _count: {
                 select: {
                   coupons: {
                     where: {
                       status: "ACTIVE",
                       isActive: true,
+                      categories: {
+                        some: {
+                          category: {
+                            slug: slug,
+                          },
+                        },
+                      },
                     },
                   },
                 },
@@ -53,7 +57,14 @@ export default async function CategoryPage({
       _count: {
         select: {
           stores: true,
-          coupons: true,
+          coupons: {
+            where: {
+              coupon: {
+                status: "ACTIVE",
+                isActive: true,
+              },
+            },
+          },
         },
       },
     },
@@ -61,25 +72,10 @@ export default async function CategoryPage({
 
   if (!category) notFound();
 
-  // Direct category coupons
-  const directCoupons =
-    category.coupons.map((c) => c.coupon);
-
-  // Coupons via stores
-  const storeCoupons =
-    category.stores.flatMap((cs) =>
-      cs.store.coupons
-    );
-
-  // Merge + remove duplicates
-  const allCoupons = [
-    ...directCoupons,
-    ...storeCoupons,
-  ].filter(
-    (value, index, self) =>
-      index ===
-      self.findIndex((c) => c.id === value.id)
-  );
+  // Only get coupons that are directly assigned to this category
+  const allCoupons = category.coupons
+    .map((c) => c.coupon)
+    .filter((coupon) => coupon.status === "ACTIVE" && coupon.isActive);
 
   // Get unique stores for this category
   const uniqueStores = category.stores

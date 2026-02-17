@@ -7,13 +7,26 @@ import { Flame, Sparkles, Shield, TrendingUp, Star, CheckCircle2, Zap } from "lu
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 export default async function HomePage() {
+  // Fetch banners with error handling in case Banner table doesn't exist
+  let banners: any[] = [];
+  try {
+    banners = await prisma.banner.findMany({
+      where: { isActive: true },
+      orderBy: { position: "asc" },
+      take: 4,
+    });
+  } catch (error) {
+    // If Banner table doesn't exist or there's an error, use empty array
+    console.error("Error fetching banners:", error);
+    banners = [];
+  }
+
   const [
     categories,
     featuredCoupons,
     featuredStores,
     totalCoupons,
     totalStores,
-    banners,
   ] = await Promise.all([
     prisma.category.findMany({
       take: 6,
@@ -34,16 +47,10 @@ export default async function HomePage() {
     }),
     prisma.coupon.count({ where: { status: "ACTIVE" } }),
     prisma.store.count(),
-    // @ts-ignore (if banner type not generated yet)
-    prisma.banner?.findMany({
-      where: { isActive: true },
-      orderBy: { position: "asc" },
-      take: 4,
-    }) ?? [],
   ]);
 
-  const mainBanner = banners?.[0];
-  const promoBanners = banners?.slice(1, 4);
+  const mainBanner = banners[0];
+  const promoBanners = banners.slice(1, 4);
 
   return (
     <div className="bg-white text-gray-900">
@@ -140,12 +147,24 @@ export default async function HomePage() {
             href={mainBanner.linkUrl}
             className="relative block rounded-3xl overflow-hidden group shadow-premium-xl hover:shadow-premium-xl transition-all duration-500"
           >
-            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden">
-              <img
-                src={mainBanner.imageUrl || "/api/placeholder/1200/600"}
-                alt={mainBanner.title}
-                className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
-              />
+            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
+              {mainBanner.imageUrl ? (
+                <Image
+                  src={mainBanner.imageUrl}
+                  alt={mainBanner.title}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-110"
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <Sparkles className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                    <p className="text-xl font-semibold">Featured Banner</p>
+                  </div>
+                </div>
+              )}
               {/* Premium Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
               
@@ -216,12 +235,23 @@ export default async function HomePage() {
                 href={banner.linkUrl}
                 className="relative rounded-2xl sm:rounded-3xl overflow-hidden group shadow-premium hover:shadow-premium-lg transition-all duration-500"
               >
-                <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden">
-                  <img
-                    src={banner.imageUrl || "/api/placeholder/600/400"}
-                    alt={banner.title}
-                    className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
-                  />
+                <div className="relative h-64 sm:h-80 lg:h-96 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
+                  {banner.imageUrl ? (
+                    <Image
+                      src={banner.imageUrl}
+                      alt={banner.title}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <div className="text-white text-center">
+                        <Sparkles className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm font-semibold">Promo Banner</p>
+                      </div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
                   
                   {/* Shine Effect */}
@@ -268,12 +298,7 @@ export default async function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {featuredCoupons.map((coupon: { 
-              id: string | number; 
-              title: string; 
-              code?: string; 
-              store: { name: string; logo?: string }
-            }) => {
+            {featuredCoupons.map((coupon) => {
               const discountMatch = coupon.title.match(/\d+%/);
               const discount = discountMatch ? discountMatch[0] : null;
 
@@ -354,7 +379,7 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
-            {featuredStores.map((store: { id: string | number; slug: string; logo?: string; name: string }) => (
+            {featuredStores.map((store) => (
               <Link
                 key={store.id}
                 href={`/stores/${store.slug}`}

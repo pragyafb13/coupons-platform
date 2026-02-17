@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import LogoutButton from "@/components/LogoutButton";
-import { LayoutDashboard, Store, TicketPercent, Folder, Upload } from "lucide-react";
+import { LayoutDashboard, Store, TicketPercent, Folder, Upload, Image as ImageIcon } from "lucide-react";
 
 export default async function AdminLayout({
   children,
@@ -66,6 +66,20 @@ export default async function AdminLayout({
 
               <Link href="/admin/coupons/create" className="block ml-6 hover:text-blue-400">
                 Create Coupon
+              </Link>
+            </div>
+
+            {/* BANNERS */}
+            <div className="pt-4 border-t border-gray-700">
+              <p className="text-xs text-gray-400 uppercase mb-2">Banners</p>
+
+              <Link href="/admin/banners" className="flex items-center gap-2 hover:text-blue-400">
+                <ImageIcon size={16} />
+                All Banners
+              </Link>
+
+              <Link href="/admin/banners/new" className="block ml-6 hover:text-blue-400">
+                Create Banner
               </Link>
             </div>
 

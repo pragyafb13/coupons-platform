@@ -72,13 +72,13 @@ export default function Header({ categories = [] }: HeaderProps) {
 
           {/* SEARCH BAR - Desktop */}
           <form onSubmit={handleSearch} className="hidden md:flex items-center flex-1 max-w-2xl mx-8 relative">
-            <Search className="absolute left-5 h-5 w-5 text-gray-400 pointer-events-none z-10" />
-          <input
-            type="text"
+            <Search className="absolute left-4 h-5 w-5 text-gray-400 pointer-events-none z-10" />
+            <input
+              type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search stores, coupons, deals..."
-              className="w-full pl-14 pr-4 py-3 rounded-2xl border-2 border-gray-200 bg-white focus:outline-none focus:ring-4 focus:ring-yellow-400/30 focus:border-yellow-400 transition-all text-sm text-gray-900 placeholder-gray-500 shadow-sm hover:shadow-md"
+              className="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 bg-white focus:outline-none focus:ring-4 focus:ring-yellow-400/30 focus:border-yellow-400 transition-all text-sm text-gray-900 placeholder-gray-500 shadow-sm hover:shadow-md"
             />
           </form>
 
@@ -163,7 +163,7 @@ export default function Header({ categories = [] }: HeaderProps) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-full pl-9 pr-3 py-2 rounded-full border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 transition text-sm text-gray-900 placeholder-gray-500"
+                  className="w-full pl-10 pr-3 py-2 rounded-full border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 transition text-sm text-gray-900 placeholder-gray-500"
                 />
               </div>
             </form>
