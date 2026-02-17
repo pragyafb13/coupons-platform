@@ -67,7 +67,7 @@ export default async function AdminStoresPage() {
                   <div className="flex flex-wrap gap-1">
                     {store.categories.map((sc) => (
                       <span
-                        key={sc.categoryId}
+                        key={sc.category.id}
                         className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
                       >
                         {sc.category.name}
