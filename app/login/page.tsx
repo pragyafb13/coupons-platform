@@ -78,13 +78,18 @@ function LoginForm() {
               try {
                 const result = await signIn("github", { 
                   callbackUrl: "/admin",
-                  redirect: false,
+                  redirect: true, // Let NextAuth handle the redirect
                 });
+                // If redirect is true, this code won't execute, but keep for safety
                 if (result?.error) {
                   setError("Failed to sign in. Please check your GitHub credentials.");
                   setIsLoading(false);
+                } else if (result?.ok) {
+                  // Success - redirect will happen automatically
+                  router.push("/admin");
                 }
               } catch (err) {
+                console.error("Login error:", err);
                 setError("An unexpected error occurred. Please try again.");
                 setIsLoading(false);
               }
