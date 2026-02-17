@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { updateBanner } from "../actions";
+import { updateBanner } from "../../actions";
 import Link from "next/link";
 
 export default async function EditBannerPage({
