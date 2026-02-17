@@ -7,7 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 
 // Create Prisma client with optimized configuration for serverless
 // Reduced logging to minimize overhead
-export const prisma =
+const basePrisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["error"] : ["error"],
@@ -15,7 +15,7 @@ export const prisma =
 
 // Always cache Prisma client to prevent multiple instances and connection exhaustion
 if (!globalForPrisma.prisma) {
-  globalForPrisma.prisma = prisma;
+  globalForPrisma.prisma = basePrisma;
 }
 
 // Initialize query queue
@@ -25,7 +25,7 @@ if (!globalForPrisma.queryQueue) {
 
 // Helper function to queue database queries sequentially
 // This prevents connection pool exhaustion by ensuring only one query runs at a time
-export async function queuedQuery<T>(queryFn: () => Promise<T>): Promise<T> {
+async function queuedQuery<T>(queryFn: () => Promise<T>): Promise<T> {
   // Wait for previous query to complete, then execute this one
   const previousQuery = globalForPrisma.queryQueue || Promise.resolve();
   
@@ -46,6 +46,38 @@ export async function queuedQuery<T>(queryFn: () => Promise<T>): Promise<T> {
   globalForPrisma.queryQueue = currentQuery.catch(() => {}); // Don't let errors break the queue
   return currentQuery;
 }
+
+// Wrap Prisma client to queue all queries
+// This ensures NextAuth and all other queries go through the queue
+export const prisma = new Proxy(basePrisma, {
+  get(target, prop) {
+    const value = (target as any)[prop];
+    
+    // If it's a model (like prisma.user, prisma.session, etc.), wrap its methods
+    if (value && typeof value === 'object' && !Array.isArray(value) && prop !== '$connect' && prop !== '$disconnect' && prop !== '$on' && prop !== '$use' && !prop.toString().startsWith('$')) {
+      return new Proxy(value, {
+        get(modelTarget, modelProp) {
+          const modelValue = (modelTarget as any)[modelProp];
+          
+          // If it's a query method (findMany, findUnique, create, etc.), wrap it
+          if (typeof modelValue === 'function' && 
+              ['findMany', 'findUnique', 'findFirst', 'create', 'update', 'delete', 'deleteMany', 'updateMany', 'createMany', 'count', 'aggregate', 'groupBy'].includes(modelProp.toString())) {
+            return function(...args: any[]) {
+              return queuedQuery(() => modelValue.apply(modelTarget, args));
+            };
+          }
+          
+          return modelValue;
+        }
+      });
+    }
+    
+    return value;
+  }
+});
+
+// Export the queuedQuery function for explicit use if needed
+export { queuedQuery };
 
 // Ensure connections are properly closed
 if (typeof window === "undefined") {
