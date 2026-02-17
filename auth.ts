@@ -59,11 +59,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: GITHUB_SECRET!,
     }),
   ] : [
-    // If config is missing, provide invalid credentials
-    // NextAuth will show a proper error instead of crashing
+    // If config is missing, NextAuth will show a Configuration error
+    // This is expected - the user needs to set environment variables in Vercel
     GitHub({
-      clientId: "missing-github-id",
-      clientSecret: "missing-github-secret",
+      clientId: GITHUB_ID || "",
+      clientSecret: GITHUB_SECRET || "",
     }),
   ],
 
