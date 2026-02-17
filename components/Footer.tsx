@@ -18,7 +18,11 @@ export default async function Footer() {
           slug: true,
         },
       }).catch(() => [] as Array<{ id: string; name: string; slug: string }>),
-      prisma.coupon.count({ where: { status: "ACTIVE", isActive: true } }).catch(() => 0),
+      // Count all coupons for display
+      prisma.coupon.count().catch((err) => {
+        console.error("Error counting coupons in footer:", err);
+        return 0;
+      }),
       prisma.store.count().catch(() => 0),
     ]);
     
@@ -79,7 +83,7 @@ export default async function Footer() {
                     >
                       {category.name}
                     </Link>
-                  </li>
+              </li>
                 ))
               ) : (
                 <li className="text-gray-400">No categories available</li>

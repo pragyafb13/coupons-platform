@@ -32,23 +32,47 @@ export default async function HomePage() {
       prisma.category.findMany({
         take: 6,
         orderBy: { createdAt: "desc" },
-      }).catch(() => []),
+      }).catch((err) => {
+        console.error("Error fetching categories:", err);
+        return [];
+      }),
       prisma.coupon.findMany({
         where: {
           status: "ACTIVE",
-          isActive: true,
         },
         include: { store: true },
         orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
         take: 8,
-      }).catch(() => []),
+      }).catch((err) => {
+        console.error("Error fetching featured coupons:", err);
+        return [];
+      }),
       prisma.store.findMany({
-        where: { isFeatured: true },
         take: 12,
-      }).catch(() => []),
-      prisma.coupon.count({ where: { status: "ACTIVE" } }).catch(() => 0),
-      prisma.store.count().catch(() => 0),
+        orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
+      }).catch((err) => {
+        console.error("Error fetching featured stores:", err);
+        return [];
+      }),
+      // Count all coupons (not just ACTIVE) for display
+      prisma.coupon.count().catch((err) => {
+        console.error("Error counting coupons:", err);
+        return 0;
+      }),
+      prisma.store.count().catch((err) => {
+        console.error("Error counting stores:", err);
+        return 0;
+      }),
     ]);
+    
+    // Log results for debugging
+    console.log("Homepage data fetched:", {
+      categories: categories.length,
+      featuredCoupons: featuredCoupons.length,
+      featuredStores: featuredStores.length,
+      totalCoupons,
+      totalStores,
+    });
   } catch (error) {
     console.error("Error fetching homepage data:", error);
     // Use default values if queries fail
