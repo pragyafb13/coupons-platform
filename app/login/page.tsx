@@ -72,27 +72,15 @@ function LoginForm() {
           )}
 
           <button
-            onClick={async () => {
+            onClick={() => {
               setIsLoading(true);
               setError(null);
-              try {
-                const result = await signIn("github", { 
-                  callbackUrl: "/admin",
-                  redirect: true, // Let NextAuth handle the redirect
-                });
-                // If redirect is true, this code won't execute, but keep for safety
-                if (result?.error) {
-                  setError("Failed to sign in. Please check your GitHub credentials.");
-                  setIsLoading(false);
-                } else if (result?.ok) {
-                  // Success - redirect will happen automatically
-                  router.push("/admin");
-                }
-              } catch (err) {
-                console.error("Login error:", err);
-                setError("An unexpected error occurred. Please try again.");
-                setIsLoading(false);
-              }
+              // signIn with redirect: true will redirect to GitHub and back
+              // Errors will be handled via URL params (checked in useEffect)
+              signIn("github", { 
+                callbackUrl: "/admin",
+                redirect: true,
+              });
             }}
             disabled={isLoading}
             className="group w-full flex items-center justify-center gap-3 bg-white text-black font-semibold py-3 rounded-2xl transition-all duration-300 hover:bg-gray-200 hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
