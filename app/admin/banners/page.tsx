@@ -2,9 +2,10 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { toggleBannerActive, deleteBanner } from "./actions";
+import { Banner } from "@prisma/client";
 
 export default async function AdminBannersPage() {
-  let banners = [];
+  let banners: Banner[] = [];
   
   try {
     banners = await prisma.banner.findMany({
