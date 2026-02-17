@@ -7,17 +7,25 @@ import { prisma } from "@/lib/prisma";
 const AUTH_SECRET = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
 const GITHUB_ID = process.env.GITHUB_ID;
 const GITHUB_SECRET = process.env.GITHUB_SECRET;
+const NEXTAUTH_URL = process.env.NEXTAUTH_URL || process.env.AUTH_URL;
 
+// Throw errors if required variables are missing (NextAuth will show Configuration error)
 if (!AUTH_SECRET) {
-  console.error("❌ AUTH_SECRET or NEXTAUTH_SECRET is missing!");
+  throw new Error(
+    "❌ AUTH_SECRET or NEXTAUTH_SECRET is missing! Please set it in your Vercel environment variables."
+  );
 }
 
 if (!GITHUB_ID) {
-  console.error("❌ GITHUB_ID is missing!");
+  throw new Error(
+    "❌ GITHUB_ID is missing! Please set it in your Vercel environment variables."
+  );
 }
 
 if (!GITHUB_SECRET) {
-  console.error("❌ GITHUB_SECRET is missing!");
+  throw new Error(
+    "❌ GITHUB_SECRET is missing! Please set it in your Vercel environment variables."
+  );
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -31,8 +39,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   providers: [
     GitHub({
-      clientId: GITHUB_ID!,
-      clientSecret: GITHUB_SECRET!,
+      clientId: GITHUB_ID,
+      clientSecret: GITHUB_SECRET,
     }),
   ],
 
