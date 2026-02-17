@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
@@ -16,7 +18,17 @@ export default async function SearchPage(props: {
     );
   }
 
-  const results = await prisma.coupon.findMany({
+  let results: Array<{
+    id: string;
+    title: string;
+    store: {
+      id: string;
+      name: string;
+    };
+  }> = [];
+
+  try {
+    results = await prisma.coupon.findMany({
     where: {
       status: "ACTIVE",
       OR: [
@@ -40,6 +52,10 @@ export default async function SearchPage(props: {
       store: true,
     },
   });
+  } catch (error) {
+    console.error("Error searching coupons:", error);
+    results = [];
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-20">

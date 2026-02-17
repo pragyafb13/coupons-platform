@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -12,7 +14,9 @@ export default async function StoreDetailPage({ params }: Props) {
 
   if (!slug) return notFound();
 
-  const store = await prisma.store.findUnique({
+  let store;
+  try {
+    store = await prisma.store.findUnique({
     where: { slug },
     include: { 
       coupons: {
@@ -27,6 +31,10 @@ export default async function StoreDetailPage({ params }: Props) {
       },
     },
   });
+  } catch (error) {
+    console.error("Error fetching store:", error);
+    return notFound();
+  }
 
   if (!store) return notFound();
 

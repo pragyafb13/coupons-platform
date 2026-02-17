@@ -7,8 +7,12 @@ To make login work, you need to set the following environment variables in your 
 ### 1. Database
 - `DATABASE_URL` - Your PostgreSQL connection string
   - **Important**: For Vercel deployments, use a **connection pooler URL** (not direct connection)
-  - If using Neon, Supabase, or similar services, they provide a pooled connection URL
-  - Example format: `postgresql://user:pass@host:port/db?pgbouncer=true&connection_limit=1`
+  - **For Supabase**: Use **Session pooler** (not Transaction pooler) for Prisma
+    - Transaction pooler doesn't support prepared statements (Prisma requirement)
+    - Session pooler works with Prisma but requires proper connection management
+    - Connection string format: `postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true`
+  - **For Neon**: Use the "Pooled connection" URL (includes `?pgbouncer=true`)
+  - **For other providers**: Ensure the connection string includes pooling parameters
   - This prevents "MaxClientsInSessionMode" errors during build/prerendering
 
 ### 2. NextAuth Authentication

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -11,7 +13,9 @@ export default async function CategoryPage({
 }) {
   const { slug } = await params;
 
-  const category = await prisma.category.findUnique({
+  let category;
+  try {
+    category = await prisma.category.findUnique({
     where: { slug },
     include: {
       coupons: {
@@ -69,6 +73,10 @@ export default async function CategoryPage({
       },
     },
   });
+  } catch (error) {
+    console.error("Error fetching category:", error);
+    notFound();
+  }
 
   if (!category) notFound();
 

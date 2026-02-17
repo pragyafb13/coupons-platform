@@ -1,33 +1,56 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { Store as StoreIcon, Star, Sparkles, TrendingUp } from "lucide-react";
 
 export default async function StoresPage() {
-  const stores = await prisma.store.findMany({
-    include: {
-      coupons: {
-        where: {
-          status: "ACTIVE",
-          isActive: true,
+  let stores: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    logo: string | null;
+    isFeatured: boolean;
+    coupons: Array<{ id: string }>;
+    _count: {
+      coupons: number;
+    };
+  }> = [];
+
+  try {
+    stores = await prisma.store.findMany({
+      include: {
+        coupons: {
+          where: {
+            status: "ACTIVE",
+            isActive: true,
+          },
+          select: {
+            id: true,
+          },
         },
-      },
-      _count: {
-        select: {
-          coupons: {
-            where: {
-              status: "ACTIVE",
-              isActive: true,
+        _count: {
+          select: {
+            coupons: {
+              where: {
+                status: "ACTIVE",
+                isActive: true,
+              },
             },
           },
         },
       },
-    },
-    orderBy: [
-      { isFeatured: "desc" },
-      { name: "asc" }
-    ],
-  });
+      orderBy: [
+        { isFeatured: "desc" },
+        { name: "asc" }
+      ],
+    });
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+    // Use empty array if query fails
+    stores = [];
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">

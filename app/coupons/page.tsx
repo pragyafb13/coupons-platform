@@ -1,22 +1,43 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { Flame, Clock, CheckCircle2, Zap, Sparkles } from "lucide-react";
 
 export default async function CouponsPage() {
-  const coupons = await prisma.coupon.findMany({
-    where: { 
-      status: "ACTIVE",
-      isActive: true,
-    },
-    include: { 
-      store: true,
-    },
-    orderBy: [
-      { isVerified: "desc" },
-      { createdAt: "desc" }
-    ],
-  });
+  let coupons: Array<{
+    id: string;
+    title: string;
+    code: string | null;
+    expiryDate: Date | null;
+    isVerified: boolean;
+    store: {
+      id: string;
+      name: string;
+      logo: string | null;
+    };
+  }> = [];
+
+  try {
+    coupons = await prisma.coupon.findMany({
+      where: { 
+        status: "ACTIVE",
+        isActive: true,
+      },
+      include: { 
+        store: true,
+      },
+      orderBy: [
+        { isVerified: "desc" },
+        { createdAt: "desc" }
+      ],
+    });
+  } catch (error) {
+    console.error("Error fetching coupons:", error);
+    // Use empty array if query fails
+    coupons = [];
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">

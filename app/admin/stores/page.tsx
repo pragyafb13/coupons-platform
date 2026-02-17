@@ -1,18 +1,33 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { toggleFeaturedAction, deleteStore } from "./actions";
 
 export default async function AdminStoresPage() {
-  const stores = await prisma.store.findMany({
-    orderBy: { createdAt: "desc" },
-    include: {
-      categories: {
-        include: {
-          category: true,
+  let stores: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    isFeatured: boolean;
+    categories: Array<{ category: { id: string; name: string } }>;
+  }> = [];
+
+  try {
+    stores = await prisma.store.findMany({
+      orderBy: { createdAt: "desc" },
+      include: {
+        categories: {
+          include: {
+            category: true,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Error fetching stores:", error);
+    stores = [];
+  }
 
   return (
     <div>

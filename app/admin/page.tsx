@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Counter from "@/components/Counter";
@@ -5,15 +7,30 @@ import { toggleFeatured, deleteStore } from "./actions";
 import { Store, TicketPercent, CheckCircle } from "lucide-react";
 
 export default async function AdminDashboard() {
-  const [stores, totalCoupons, activeCoupons] = await Promise.all([
-    prisma.store.findMany({
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.coupon.count(),
-    prisma.coupon.count({
-      where: { status: "ACTIVE" },
-    }),
-  ]);
+  let stores: Array<{ id: string; name: string; slug: string; isFeatured: boolean }> = [];
+  let totalCoupons = 0;
+  let activeCoupons = 0;
+
+  try {
+    [stores, totalCoupons, activeCoupons] = await Promise.all([
+      prisma.store.findMany({
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          isFeatured: true,
+        },
+      }).catch(() => []),
+      prisma.coupon.count().catch(() => 0),
+      prisma.coupon.count({
+        where: { status: "ACTIVE" },
+      }).catch(() => 0),
+    ]);
+  } catch (error) {
+    console.error("Error fetching admin dashboard data:", error);
+    // Use default values if queries fail
+  }
 
   return (
     <div className="space-y-12">

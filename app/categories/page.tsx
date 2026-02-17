@@ -1,19 +1,37 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { Grid3x3, Store as StoreIcon, Tag, Sparkles } from "lucide-react";
 
 export default async function CategoriesPage() {
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: {
-          stores: true,
-          coupons: true,
+  let categories: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    _count: {
+      stores: number;
+      coupons: number;
+    };
+  }> = [];
+
+  try {
+    categories = await prisma.category.findMany({
+      include: {
+        _count: {
+          select: {
+            stores: true,
+            coupons: true,
+          },
         },
       },
-    },
-    orderBy: { name: "asc" },
-  });
+      orderBy: { name: "asc" },
+    });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    // Use empty array if query fails
+    categories = [];
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">

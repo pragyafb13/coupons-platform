@@ -1,20 +1,37 @@
+export const dynamic = "force-dynamic";
+
 // app/admin/coupons/page.tsx
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
 export default async function CouponsPage() {
   // Fetch all coupons with categories
-  const coupons = await prisma.coupon.findMany({
-    orderBy: { createdAt: "desc" },
-    include: { 
-      store: true,
-      categories: {
-        include: {
-          category: true,
+  let coupons: Array<{
+    id: string;
+    title: string;
+    code: string | null;
+    status: string;
+    expiryDate: Date | null;
+    store: { id: string; name: string } | null;
+    categories: Array<{ category: { id: string; name: string } }>;
+  }> = [];
+
+  try {
+    coupons = await prisma.coupon.findMany({
+      orderBy: { createdAt: "desc" },
+      include: { 
+        store: true,
+        categories: {
+          include: {
+            category: true,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Error fetching coupons:", error);
+    coupons = [];
+  }
 
   return (
     <div className="max-w-4xl mx-auto py-10 space-y-6">
