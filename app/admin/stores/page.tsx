@@ -5,6 +5,13 @@ import { toggleFeaturedAction, deleteStore } from "./actions";
 export default async function AdminStoresPage() {
   const stores = await prisma.store.findMany({
     orderBy: { createdAt: "desc" },
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
   });
 
   return (
@@ -25,6 +32,7 @@ export default async function AdminStoresPage() {
           <tr>
             <th className="text-left px-4 py-3">Name</th>
             <th className="text-left px-4 py-3">Slug</th>
+            <th className="text-left px-4 py-3">Categories</th>
             <th className="text-left px-4 py-3">Featured</th>
             <th className="text-left px-4 py-3">Actions</th>
           </tr>
@@ -38,6 +46,23 @@ export default async function AdminStoresPage() {
             >
               <td className="px-4 py-3 font-medium">{store.name}</td>
               <td className="px-4 py-3 text-gray-700">{store.slug}</td>
+              
+              <td className="px-4 py-3">
+                {store.categories && store.categories.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {store.categories.map((sc) => (
+                      <span
+                        key={sc.categoryId}
+                        className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                      >
+                        {sc.category.name}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-gray-400">-</span>
+                )}
+              </td>
 
               <td className="px-4 py-3 flex items-center gap-3">
                 <span>{store.isFeatured ? "✅ Yes" : "—"}</span>

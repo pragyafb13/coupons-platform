@@ -8,29 +8,35 @@ import { redirect } from "next/navigation";
 /* CREATE BANNER */
 /* -------------------------------------------------- */
 export async function createBanner(formData: FormData) {
-  const title = formData.get("title") as string;
-  const imageUrl = formData.get("imageUrl") as string;
-  const linkUrl = formData.get("linkUrl") as string;
-  const isActive = formData.get("isActive") === "on";
-  const position = parseInt(formData.get("position") as string) || 0;
+  try {
+    const title = formData.get("title") as string;
+    const imageUrl = formData.get("imageUrl") as string;
+    const linkUrl = formData.get("linkUrl") as string;
+    const isActive = formData.get("isActive") === "on";
+    const positionStr = formData.get("position") as string;
+    const position = positionStr ? parseInt(positionStr) : 0;
 
-  if (!title || !imageUrl || !linkUrl) {
-    throw new Error("Title, image URL, and link URL are required");
+    if (!title || !imageUrl || !linkUrl) {
+      throw new Error("Title, image URL, and link URL are required");
+    }
+
+    await prisma.banner.create({
+      data: {
+        title: title.trim(),
+        imageUrl: imageUrl.trim(),
+        linkUrl: linkUrl.trim(),
+        isActive,
+        position: isNaN(position) ? 0 : position,
+      },
+    });
+
+    revalidatePath("/admin/banners");
+    revalidatePath("/");
+    redirect("/admin/banners");
+  } catch (error) {
+    console.error("Error creating banner:", error);
+    throw error;
   }
-
-  await prisma.banner.create({
-    data: {
-      title,
-      imageUrl,
-      linkUrl,
-      isActive,
-      position,
-    },
-  });
-
-  revalidatePath("/admin/banners");
-  revalidatePath("/");
-  redirect("/admin/banners");
 }
 
 /* -------------------------------------------------- */

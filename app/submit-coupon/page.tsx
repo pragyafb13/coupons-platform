@@ -1,6 +1,22 @@
-import { Upload, CheckCircle2, AlertCircle } from "lucide-react";
+"use client";
 
-export default function SubmitCouponPage() {
+import { Upload, CheckCircle2, AlertCircle } from "lucide-react";
+import { submitCoupon } from "./actions";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+
+function SubmitCouponForm() {
+  const searchParams = useSearchParams();
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      setShowSuccess(true);
+      // Clear success message after 5 seconds
+      const timer = setTimeout(() => setShowSuccess(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -48,9 +64,23 @@ export default function SubmitCouponPage() {
             </div>
           </section>
 
+          {showSuccess && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="h-6 w-6 text-green-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-green-900 mb-2">Success!</h3>
+                  <p className="text-green-800 text-sm">
+                    Your coupon has been submitted successfully. Our team will review it and publish it soon.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Submit Your Coupon</h2>
-            <form className="space-y-6">
+            <form action={submitCoupon} className="space-y-6">
               <div>
                 <label htmlFor="store" className="block text-sm font-medium text-gray-700 mb-2">
                   Store Name *
@@ -164,5 +194,13 @@ export default function SubmitCouponPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SubmitCouponPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SubmitCouponForm />
+    </Suspense>
   );
 }
