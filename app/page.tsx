@@ -21,33 +21,43 @@ export default async function HomePage() {
     banners = [];
   }
 
-  const [
-    categories,
-    featuredCoupons,
-    featuredStores,
-    totalCoupons,
-    totalStores,
-  ] = await Promise.all([
-    prisma.category.findMany({
-      take: 6,
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.coupon.findMany({
-      where: {
-        status: "ACTIVE",
-        isActive: true,
-      },
-      include: { store: true },
-      orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
-      take: 8,
-    }),
-    prisma.store.findMany({
-      where: { isFeatured: true },
-      take: 12,
-    }),
-    prisma.coupon.count({ where: { status: "ACTIVE" } }),
-    prisma.store.count(),
-  ]);
+  let categories: any[] = [];
+  let featuredCoupons: any[] = [];
+  let featuredStores: any[] = [];
+  let totalCoupons = 0;
+  let totalStores = 0;
+
+  try {
+    [categories, featuredCoupons, featuredStores, totalCoupons, totalStores] = await Promise.all([
+      prisma.category.findMany({
+        take: 6,
+        orderBy: { createdAt: "desc" },
+      }).catch(() => []),
+      prisma.coupon.findMany({
+        where: {
+          status: "ACTIVE",
+          isActive: true,
+        },
+        include: { store: true },
+        orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
+        take: 8,
+      }).catch(() => []),
+      prisma.store.findMany({
+        where: { isFeatured: true },
+        take: 12,
+      }).catch(() => []),
+      prisma.coupon.count({ where: { status: "ACTIVE" } }).catch(() => 0),
+      prisma.store.count().catch(() => 0),
+    ]);
+  } catch (error) {
+    console.error("Error fetching homepage data:", error);
+    // Use default values if queries fail
+    categories = [];
+    featuredCoupons = [];
+    featuredStores = [];
+    totalCoupons = 0;
+    totalStores = 0;
+  }
 
   const mainBanner = banners[0];
   const promoBanners = banners.slice(1, 4);

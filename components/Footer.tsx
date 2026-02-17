@@ -3,22 +3,35 @@ import { prisma } from "@/lib/prisma";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 
 export default async function Footer() {
-  const categories = await prisma.category.findMany({
-    take: 8,
-    orderBy: { name: "asc" },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-    },
-  });
+  let categories: Array<{ id: string; name: string; slug: string }> = [];
+  let totalCoupons = 0;
+  let totalStores = 0;
 
-  const stats = await Promise.all([
-    prisma.coupon.count({ where: { status: "ACTIVE", isActive: true } }),
-    prisma.store.count(),
-  ]);
-
-  const [totalCoupons, totalStores] = stats;
+  try {
+    const [categoriesData, couponsCount, storesCount] = await Promise.all([
+      prisma.category.findMany({
+        take: 8,
+        orderBy: { name: "asc" },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      }).catch(() => [] as Array<{ id: string; name: string; slug: string }>),
+      prisma.coupon.count({ where: { status: "ACTIVE", isActive: true } }).catch(() => 0),
+      prisma.store.count().catch(() => 0),
+    ]);
+    
+    categories = categoriesData;
+    totalCoupons = couponsCount;
+    totalStores = storesCount;
+  } catch (error) {
+    console.error("Error fetching footer data:", error);
+    // Use default values if queries fail
+    categories = [];
+    totalCoupons = 0;
+    totalStores = 0;
+  }
 
   return (
     <footer className="bg-gray-900 text-gray-300 border-t border-gray-800">
