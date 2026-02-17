@@ -1,13 +1,28 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Github } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Github, AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Check for error in URL params
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      setError(
+        errorParam === "Configuration"
+          ? "Authentication is not properly configured. Please check environment variables."
+          : "An error occurred during login. Please try again."
+      );
+    }
+  }, [searchParams]);
 
   // Auto redirect if already logged in
   useEffect(() => {
@@ -46,14 +61,48 @@ export default function LoginPage() {
             Secure access to your dashboard
           </p>
 
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="text-left">
+                <p className="text-red-400 font-semibold text-sm mb-1">Login Error</p>
+                <p className="text-red-300 text-xs">{error}</p>
+              </div>
+            </div>
+          )}
+
           <button
-            onClick={() =>
-              signIn("github", { callbackUrl: "/admin" })
-            }
-            className="group w-full flex items-center justify-center gap-3 bg-white text-black font-semibold py-3 rounded-2xl transition-all duration-300 hover:bg-gray-200 hover:shadow-xl active:scale-95"
+            onClick={async () => {
+              setIsLoading(true);
+              setError(null);
+              try {
+                const result = await signIn("github", { 
+                  callbackUrl: "/admin",
+                  redirect: false,
+                });
+                if (result?.error) {
+                  setError("Failed to sign in. Please check your GitHub credentials.");
+                  setIsLoading(false);
+                }
+              } catch (err) {
+                setError("An unexpected error occurred. Please try again.");
+                setIsLoading(false);
+              }
+            }}
+            disabled={isLoading}
+            className="group w-full flex items-center justify-center gap-3 bg-white text-black font-semibold py-3 rounded-2xl transition-all duration-300 hover:bg-gray-200 hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Github size={20} />
-            Continue with GitHub
+            {isLoading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                <Github size={20} />
+                Continue with GitHub
+              </>
+            )}
           </button>
 
           <p className="text-gray-400 text-xs mt-8">

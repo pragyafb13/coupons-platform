@@ -8,6 +8,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // See: https://next-auth.js.org/adapters/prisma
   adapter: PrismaAdapter(prisma) as any, // `as any` is a workaround for type mismatch issues
 
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+  
+  trustHost: true, // Required for Vercel deployments
+
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID!,
@@ -19,13 +23,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     strategy: "database",
   },
 
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+
   callbacks: {
     async session({ session, user }) {
-      if (session.user) {
+      if (session.user && user) {
         session.user.id = user.id;
-        session.user.role = user.role;
+        session.user.role = (user as any).role;
       }
       return session;
+    },
+    async signIn({ user, account, profile }) {
+      // Allow all GitHub users to sign in
+      // You can add role assignment logic here if needed
+      return true;
     },
   },
 });
