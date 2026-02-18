@@ -344,14 +344,14 @@ export default async function CategoryPage({
           <div className="flex flex-wrap gap-4">
             <Link
               href="/categories"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-600 hover:to-indigo-700 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-800 transition shadow-lg hover:shadow-xl"
             >
               <Grid3x3 className="h-5 w-5" />
               View All Categories
             </Link>
             <Link
               href="/coupons"
-              className="inline-flex items-center gap-2 bg-white border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-xl font-bold hover:border-purple-500 hover:text-purple-600 transition shadow-sm hover:shadow-md"
+              className="inline-flex items-center gap-2 bg-white border-2 border-gray-300 text-gray-900 px-6 py-3 rounded-xl font-bold hover:border-purple-600 hover:text-purple-700 hover:bg-purple-50 transition shadow-sm hover:shadow-md"
             >
               <Tag className="h-5 w-5" />
               Browse All Coupons
