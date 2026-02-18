@@ -39,7 +39,7 @@ export default async function CouponsPage() {
 
       <Link
         href="/admin/coupons/create"
-        className="btn-primary px-4 py-2"
+        className="inline-flex items-center gap-2 bg-black text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-sm"
       >
         + Create New Coupon
       </Link>

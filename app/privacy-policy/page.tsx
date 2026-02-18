@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Shield } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
