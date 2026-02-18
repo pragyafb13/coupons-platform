@@ -318,12 +318,13 @@ export default async function HomePage() {
             {featuredCoupons.map((coupon) => {
               const discountMatch = coupon.title.match(/\d+%/);
               const discount = discountMatch ? discountMatch[0] : null;
+              const hasCode = !!coupon.code;
 
               return (
                 <Link
                   key={coupon.id}
                   href={`/coupons/${coupon.id}`}
-                  className="group bg-white border-2 border-gray-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-premium hover:shadow-premium-lg hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
+                  className="group bg-white border-2 border-gray-200 rounded-2xl sm:rounded-3xl overflow-hidden shadow-premium hover:shadow-premium-lg hover:-translate-y-2 transition-all duration-300 relative"
                 >
                   {/* Premium Discount Badge */}
                   {discount && (
@@ -339,38 +340,62 @@ export default async function HomePage() {
                     Verified
                   </div>
 
-                  <div className="flex items-center gap-3 mb-6 pr-20">
+                  {/* Store Image/Logo Section */}
+                  <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                     {coupon.store.logo ? (
-                      <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 p-2">
-                        <Image
-                          src={coupon.store.logo}
-                          alt={coupon.store.name}
-                          width={64}
-                          height={64}
-                          className="object-contain w-full h-full"
-                        />
+                      <div className="absolute inset-0 flex items-center justify-center p-8">
+                        <div className="relative w-full h-full max-w-[200px] max-h-[120px]">
+                          <Image
+                            src={coupon.store.logo}
+                            alt={coupon.store.name}
+                            fill
+                            className="object-contain group-hover:scale-110 transition-transform duration-300"
+                            sizes="(max-width: 768px) 100vw, 200px"
+                          />
+                        </div>
                       </div>
                     ) : (
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                        <span className="font-bold text-gray-700 text-sm">
-                          {coupon.store.name.charAt(0)}
-                        </span>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <span className="font-extrabold text-white text-4xl">
+                            {coupon.store.name.charAt(0)}
+                          </span>
+                        </div>
                       </div>
                     )}
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent" />
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-500 transition line-clamp-2 min-h-[3.5rem] text-gray-900">
-                    {coupon.title}
-                  </h3>
-
-                  {coupon.code && (
-                    <div className="border-2 border-dashed border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
-                      {coupon.code}
+                  {/* Content Section */}
+                  <div className="p-6 sm:p-8">
+                    {/* Store Name */}
+                    <div className="mb-3">
+                      <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                        {coupon.store.name}
+                      </p>
                     </div>
-                  )}
 
-                  <div className="bg-gradient-to-r from-gray-900 to-black text-white text-center py-4 rounded-xl font-bold text-base sm:text-lg group-hover:from-red-500 group-hover:to-red-600 transition shadow-lg">
-                    Get Deal →
+                    {/* Coupon Title */}
+                    <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-500 transition line-clamp-2 min-h-[3.5rem] text-gray-900">
+                      {coupon.title}
+                    </h3>
+
+                    {/* Coupon Code */}
+                    {coupon.code && (
+                      <div className="border-2 border-dashed border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
+                        {coupon.code}
+                      </div>
+                    )}
+
+                    {/* Dynamic Button */}
+                    <div className={`text-center py-4 rounded-xl font-bold text-base sm:text-lg transition shadow-lg ${
+                      hasCode
+                        ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white group-hover:from-yellow-400 group-hover:to-orange-400"
+                        : "bg-gradient-to-r from-gray-900 to-black text-white group-hover:from-red-500 group-hover:to-red-600"
+                    }`}>
+                      {hasCode ? "Show Coupon →" : "Show Deal →"}
+                    </div>
                   </div>
                 </Link>
               );
