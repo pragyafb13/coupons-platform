@@ -18,7 +18,18 @@ export default async function SavedPage() {
   }
 
   let user;
-  let saved = [];
+  let saved: Array<{
+    id: string;
+    coupon: {
+      id: string;
+      title: string;
+      code: string | null;
+      store: {
+        id: string;
+        name: string;
+      } | null;
+    };
+  }> = [];
 
   try {
     user = await prisma.user.findUnique({
