@@ -81,16 +81,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     async session({ session, user }) {
-      if (session.user && user) {
-        session.user.id = user.id;
-        session.user.role = (user as any).role;
+      try {
+        if (session.user && user) {
+          session.user.id = user.id;
+          session.user.role = (user as any).role;
+        }
+        return session;
+      } catch (error) {
+        console.error("Error in session callback:", error);
+        // Return session even if there's an error
+        return session;
       }
-      return session;
     },
     async signIn({ user, account, profile }) {
-      // Allow all GitHub users to sign in
-      // You can add role assignment logic here if needed
-      return true;
+      try {
+        // Allow all GitHub users to sign in
+        // You can add role assignment logic here if needed
+        return true;
+      } catch (error) {
+        console.error("Error in signIn callback:", error);
+        // Allow sign in even if there's an error
+        return true;
+      }
     },
   },
 });
