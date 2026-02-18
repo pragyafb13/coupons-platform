@@ -68,46 +68,51 @@ export default async function NewStorePage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <input
-              type="checkbox"
-              name="isFeatured"
-              id="isFeatured"
-              className="w-5 h-5 text-black border-gray-300 rounded focus:ring-2 focus:ring-black"
-            />
-            <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700 cursor-pointer">
-              Featured Store
-            </label>
-            <p className="text-xs text-gray-500 ml-auto">
-              Featured stores appear prominently on the homepage
-            </p>
-          </div>
-
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Categories <span className="text-red-500">*</span>
             </label>
             <div className="border border-gray-300 rounded-lg p-4 max-h-64 overflow-y-auto bg-gray-50">
               {categories.length === 0 ? (
                 <p className="text-gray-500 text-sm">No categories available. Please create categories first.</p>
               ) : (
-                <div className="space-y-2">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {categories.map((category) => (
                     <label
                       key={category.id}
-                      className="flex items-center gap-3 p-2 rounded hover:bg-white cursor-pointer transition"
+                      className="flex items-center gap-2 p-2 rounded hover:bg-white cursor-pointer transition"
                     >
                       <input
                         type="checkbox"
                         name="categoryIds"
                         value={category.id}
-                        className="w-4 h-4 text-black border-gray-300 rounded focus:ring-2 focus:ring-black cursor-pointer flex-shrink-0 mt-0.5"
+                        className="w-4 h-4 text-black border-gray-300 rounded focus:ring-2 focus:ring-black cursor-pointer flex-shrink-0"
                       />
                       <span className="text-sm text-gray-700 flex-1">{category.name}</span>
                     </label>
                   ))}
                 </div>
               )}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Select one or more categories for this store
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <input
+              type="checkbox"
+              name="isFeatured"
+              id="isFeatured"
+              className="w-5 h-5 text-black border-gray-300 rounded focus:ring-2 focus:ring-black flex-shrink-0"
+            />
+            <div className="flex-1">
+              <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700 cursor-pointer block">
+                Featured Store
+              </label>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Featured stores appear prominently on the homepage
+              </p>
             </div>
           </div>
 

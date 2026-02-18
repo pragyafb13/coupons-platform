@@ -42,7 +42,7 @@ export default async function EditCouponPage({
 
   return (
     <div className="max-w-4xl mx-auto py-8">
-      <div className="bg-white border shadow-sm rounded-2xl p-10 space-y-8">
+      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-10 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>

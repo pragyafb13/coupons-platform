@@ -1,8 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import { prisma } from "@/lib/prisma";
-import { createCategory, deleteCategory } from "./actions";
+import { createCategory } from "./actions";
 import Link from "next/link";
+import DeleteButton from "./DeleteButton";
 
 export default async function AdminCategoriesPage() {
   let categories: Array<{ id: string; name: string; slug: string }> = [];
@@ -108,20 +109,7 @@ export default async function AdminCategoriesPage() {
                           >
                             Edit
                           </Link>
-                          <form action={deleteCategory} className="inline">
-                            <input type="hidden" name="id" value={cat.id} />
-                            <button
-                              type="submit"
-                              className="text-sm font-medium text-red-600 hover:text-red-800 transition"
-                              onClick={(e) => {
-                                if (!confirm(`Are you sure you want to delete "${cat.name}"? This will remove all category associations.`)) {
-                                  e.preventDefault();
-                                }
-                              }}
-                            >
-                              Delete
-                            </button>
-                          </form>
+                          <DeleteButton categoryId={cat.id} categoryName={cat.name} />
                         </div>
                       </td>
                     </tr>

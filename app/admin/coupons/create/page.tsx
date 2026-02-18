@@ -84,24 +84,27 @@ export default async function CreateCouponPage() {
             {categories.length === 0 ? (
               <p className="text-gray-500 text-sm">No categories available. Please create categories first.</p>
             ) : (
-              <div className="space-y-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {categories.map((cat) => (
                   <label
                     key={cat.id}
-                    className="flex items-center gap-3 p-2 rounded hover:bg-white cursor-pointer transition"
+                    className="flex items-center gap-2 p-2 rounded hover:bg-white cursor-pointer transition"
                   >
                     <input
                       type="checkbox"
                       name="categoryIds"
                       value={cat.id}
-                      className="w-4 h-4 text-black border-gray-300 rounded focus:ring-2 focus:ring-black cursor-pointer"
+                      className="w-4 h-4 text-black border-gray-300 rounded focus:ring-2 focus:ring-black cursor-pointer flex-shrink-0"
                     />
-                    <span className="text-sm text-gray-700">{cat.name}</span>
+                    <span className="text-sm text-gray-700 flex-1">{cat.name}</span>
                   </label>
                 ))}
               </div>
             )}
           </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Select one or more categories for this coupon
+          </p>
         </div>
 
         <div>
