@@ -238,7 +238,7 @@ export default async function CategoryPage({
               </p>
               <Link
                 href="/coupons"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-600 hover:to-indigo-700 transition shadow-lg"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-800 transition shadow-lg"
               >
                 Browse All Coupons
                 <span className="text-xl">→</span>
