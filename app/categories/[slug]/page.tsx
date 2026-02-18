@@ -16,23 +16,17 @@ export default async function CategoryPage({
   let category;
   try {
     category = await prisma.category.findUnique({
-    where: { slug },
-    include: {
-      coupons: {
-        where: {
-          coupon: {
-            status: "ACTIVE",
-            isActive: true,
-          },
-        },
-        include: {
-          coupon: {
-            include: {
-              store: true,
+      where: { slug },
+      include: {
+        coupons: {
+          include: {
+            coupon: {
+              include: {
+                store: true,
+              },
             },
           },
         },
-      },
       stores: {
         include: {
           store: {
@@ -80,10 +74,10 @@ export default async function CategoryPage({
 
   if (!category) notFound();
 
-  // Only get coupons that are directly assigned to this category
+  // Only get coupons that are directly assigned to this category and are active
   const allCoupons = category.coupons
     .map((c) => c.coupon)
-    .filter((coupon) => coupon.status === "ACTIVE" && coupon.isActive);
+    .filter((coupon) => coupon && coupon.status === "ACTIVE" && coupon.isActive === true);
 
   // Get unique stores for this category
   const uniqueStores = category.stores
