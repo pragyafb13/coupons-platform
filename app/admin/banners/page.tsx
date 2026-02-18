@@ -3,8 +3,9 @@ export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
-import { toggleBannerActive, deleteBanner } from "./actions";
+import { toggleBannerActive } from "./actions";
 import { Banner } from "@prisma/client";
+import DeleteButton from "./DeleteButton";
 
 export default async function AdminBannersPage() {
   let banners: Banner[] = [];
@@ -110,20 +111,7 @@ export default async function AdminBannersPage() {
                       >
                         Edit
                       </Link>
-                      <form action={deleteBanner} className="inline">
-                        <input type="hidden" name="id" value={banner.id} />
-                        <button
-                          type="submit"
-                          className="text-sm font-medium text-red-600 hover:text-red-800 transition"
-                          onClick={(e) => {
-                            if (!confirm("Are you sure you want to delete this banner?")) {
-                              e.preventDefault();
-                            }
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </form>
+                      <DeleteButton bannerId={banner.id} />
                     </div>
                   </td>
                 </tr>
