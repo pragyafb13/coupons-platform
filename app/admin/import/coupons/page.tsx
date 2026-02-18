@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { importCoupons } from "./actions";
 
 export default function ImportCouponsPage() {

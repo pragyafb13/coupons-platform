@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { importStores } from "./actions";
 
 export default function ImportStoresPage() {

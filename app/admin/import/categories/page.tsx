@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { importCategories } from "./actions";
 
 export default function ImportCategoriesPage() {
