@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import Image from "next/image";
-import { prisma, queuedQuery } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { Flame, Sparkles, Shield, TrendingUp, Star, CheckCircle2, Zap } from "lucide-react";
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
@@ -10,11 +10,11 @@ export default async function HomePage() {
   // Fetch banners with error handling in case Banner table doesn't exist
   let banners: any[] = [];
   try {
-    banners = await queuedQuery(() => prisma.banner.findMany({
+    banners = await prisma.banner.findMany({
       where: { isActive: true },
       orderBy: { position: "asc" },
       take: 4,
-    }));
+    });
   } catch (error) {
     // If Banner table doesn't exist or there's an error, use empty array
     console.error("Error fetching banners:", error);
@@ -28,58 +28,27 @@ export default async function HomePage() {
   let totalStores = 0;
 
   try {
-    // Fetch data sequentially to avoid connection pool exhaustion
-    // First, get counts (simpler queries)
-    let totalCouponsResult = 0;
-    let totalStoresResult = 0;
-    
-    // Fetch ALL queries sequentially to prevent connection pool exhaustion
-    try {
-      totalCouponsResult = await queuedQuery(() => prisma.coupon.count());
-    } catch (err) {
-      console.error("❌ Error counting coupons:", err);
-    }
-    
-    try {
-      totalStoresResult = await queuedQuery(() => prisma.store.count());
-    } catch (err) {
-      console.error("❌ Error counting stores:", err);
-    }
-    
-    // Fetch lists sequentially (one at a time)
-    let categoriesResult: any[] = [];
-    try {
-      categoriesResult = await queuedQuery(() => prisma.category.findMany({
+    // Fetch all data in parallel with Promise.all for better performance
+    const [totalCouponsResult, totalStoresResult, categoriesResult, featuredCouponsResult, featuredStoresResult] = await Promise.all([
+      prisma.coupon.count().catch(() => 0),
+      prisma.store.count().catch(() => 0),
+      prisma.category.findMany({
         take: 6,
         orderBy: { createdAt: "desc" },
-      }));
-    } catch (err) {
-      console.error("❌ Error fetching categories:", err);
-    }
-    
-    let featuredCouponsResult: any[] = [];
-    try {
-      featuredCouponsResult = await queuedQuery(() => prisma.coupon.findMany({
+      }).catch(() => []),
+      prisma.coupon.findMany({
         where: {
           status: "ACTIVE",
         },
         include: { store: true },
         orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],
         take: 8,
-      }));
-    } catch (err) {
-      console.error("❌ Error fetching featured coupons:", err);
-    }
-    
-    let featuredStoresResult: any[] = [];
-    try {
-      featuredStoresResult = await queuedQuery(() => prisma.store.findMany({
+      }).catch(() => []),
+      prisma.store.findMany({
         take: 12,
         orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
-      }));
-    } catch (err) {
-      console.error("❌ Error fetching featured stores:", err);
-    }
+      }).catch(() => []),
+    ]);
     
     categories = categoriesResult;
     featuredCoupons = featuredCouponsResult;
@@ -87,21 +56,8 @@ export default async function HomePage() {
     totalCoupons = totalCouponsResult;
     totalStores = totalStoresResult;
     
-    // Log results for debugging
-    console.log("✅ Homepage data fetched successfully:", {
-      categories: categories.length,
-      featuredCoupons: featuredCoupons.length,
-      featuredStores: featuredStores.length,
-      totalCoupons,
-      totalStores,
-    });
-    
   } catch (error) {
-    console.error("❌ CRITICAL: Error fetching homepage data:", error);
-    console.error("Error details:", {
-      message: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+    console.error("❌ Error fetching homepage data:", error);
     // Use default values if queries fail
     categories = [];
     featuredCoupons = [];
