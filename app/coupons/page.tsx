@@ -116,39 +116,43 @@ export default async function CouponsPage() {
                       </div>
                     ) : (
                       <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center flex-shrink-0">
-                        <span className="font-extrabold text-gray-700 text-xl">
+                        <span className="font-extrabold text-gray-800 text-xl">
                           {coupon.store.name.charAt(0)}
                         </span>
                       </div>
                     )}
                     <div>
-                      <h4 className="font-bold text-gray-900 text-sm">{coupon.store.name}</h4>
+                      <h4 className="font-bold text-gray-900 text-base">{coupon.store.name}</h4>
                     </div>
                   </div>
 
                   {/* Coupon Title */}
-                  <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-500 transition line-clamp-2 min-h-[3.5rem] text-gray-900">
+                  <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-600 transition line-clamp-2 min-h-[3.5rem] text-gray-900 leading-tight">
                     {coupon.title}
                   </h3>
 
                   {/* Coupon Code */}
                   {coupon.code && (
-                    <div className="border-2 border-dashed border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
+                    <div className="border-2 border-dashed border-yellow-500 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
                       {coupon.code}
                     </div>
                   )}
 
                   {/* Expiry Date */}
                   {coupon.expiryDate && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-6 bg-gray-50 rounded-lg px-3 py-2">
-                      <Clock className="h-4 w-4 text-gray-500" />
-                      <span className="font-medium">Expires {new Date(coupon.expiryDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                    <div className="flex items-center gap-2 text-sm text-gray-700 mb-6 bg-gray-100 rounded-lg px-3 py-2">
+                      <Clock className="h-4 w-4 text-gray-600" />
+                      <span className="font-semibold">Expires {new Date(coupon.expiryDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                     </div>
                   )}
 
                   {/* Premium CTA Button */}
-                  <div className="bg-gradient-to-r from-gray-900 to-black text-white text-center py-4 rounded-xl font-bold text-base sm:text-lg group-hover:from-red-500 group-hover:to-red-600 transition shadow-lg">
-                    Get Deal →
+                  <div className={`text-center py-4 rounded-xl font-bold text-base sm:text-lg transition shadow-lg ${
+                    coupon.code
+                      ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white group-hover:from-yellow-400 group-hover:to-orange-400"
+                      : "bg-gradient-to-r from-gray-900 to-black text-white group-hover:from-red-500 group-hover:to-red-600"
+                  }`}>
+                    {coupon.code ? "Show Coupon →" : "Show Deal →"}
                   </div>
                 </Link>
               );

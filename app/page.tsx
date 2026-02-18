@@ -371,19 +371,19 @@ export default async function HomePage() {
                   <div className="p-6 sm:p-8">
                     {/* Store Name */}
                     <div className="mb-3">
-                      <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                      <p className="text-sm font-bold text-gray-700 uppercase tracking-wide">
                         {coupon.store.name}
                       </p>
                     </div>
 
                     {/* Coupon Title */}
-                    <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-500 transition line-clamp-2 min-h-[3.5rem] text-gray-900">
+                    <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-600 transition line-clamp-2 min-h-[3.5rem] text-gray-900 leading-tight">
                       {coupon.title}
                     </h3>
 
                     {/* Coupon Code */}
                     {coupon.code && (
-                      <div className="border-2 border-dashed border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
+                      <div className="border-2 border-dashed border-yellow-500 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
                         {coupon.code}
                       </div>
                     )}
