@@ -140,6 +140,7 @@ export default async function EditBannerPage({
           </Link>
         </div>
       </form>
+      </div>
     </div>
   );
 }
