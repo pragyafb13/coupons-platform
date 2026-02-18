@@ -52,6 +52,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: AUTH_SECRET || "temp-secret-change-in-production",
   
   trustHost: true, // Required for Vercel deployments
+  
+  // Handle errors gracefully
+  debug: process.env.NODE_ENV === "development",
 
   providers: hasMinimumConfig ? [
     GitHub({

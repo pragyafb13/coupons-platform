@@ -35,11 +35,19 @@ async function queuedQuery<T>(queryFn: () => Promise<T>): Promise<T> {
     .catch((error) => {
       // If it's a connection error, wait a bit longer and retry once
       if (error?.message?.includes("MaxClientsInSessionMode") || 
-          error?.message?.includes("max clients reached")) {
-        console.warn("Connection pool exhausted, waiting before retry...");
+          error?.message?.includes("max clients reached") ||
+          error?.message?.includes("Connection") ||
+          error?.code === "P1001" || // Prisma connection error
+          error?.code === "P1017") { // Prisma server closed connection
+        console.warn("Database connection issue, waiting before retry...", error?.message);
         return new Promise(resolve => setTimeout(resolve, 200))
-          .then(() => queryFn());
+          .then(() => queryFn())
+          .catch((retryError) => {
+            console.error("Database query failed after retry:", retryError?.message);
+            throw retryError;
+          });
       }
+      console.error("Database query error:", error?.message);
       throw error;
     });
   
