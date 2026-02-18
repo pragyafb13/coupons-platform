@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { AlertTriangle } from "lucide-react";
 
 export default function DisclaimerPage() {

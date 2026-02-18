@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 
 export default function ContactPage() {

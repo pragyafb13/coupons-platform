@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Megaphone, TrendingUp, Users, BarChart3 } from "lucide-react";
 import Link from "next/link";
 

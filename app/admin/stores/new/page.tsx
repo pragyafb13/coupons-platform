@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createStore } from "../actions";
 import { prisma } from "@/lib/prisma";
 
