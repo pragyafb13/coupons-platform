@@ -1,10 +1,10 @@
 import { handlers } from "@/auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Wrap handlers with error handling to prevent 401 errors when DB is unavailable
 async function handleRequest(
-  handler: (req: Request) => Promise<Response>,
-  req: Request
+  handler: (req: NextRequest) => Promise<Response>,
+  req: NextRequest
 ) {
   try {
     return await handler(req);
@@ -20,8 +20,7 @@ async function handleRequest(
     ) {
       console.warn("Database unavailable for auth check, returning null session:", error.message);
       // For session endpoint, return null session instead of error
-      const url = new URL(req.url);
-      if (url.pathname.includes("/session")) {
+      if (req.nextUrl.pathname.includes("/session")) {
         return NextResponse.json({ user: null }, { status: 200 });
       }
     }
@@ -30,10 +29,10 @@ async function handleRequest(
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   return handleRequest(handlers.GET, req);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   return handleRequest(handlers.POST, req);
 }
