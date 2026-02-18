@@ -4,7 +4,7 @@ import { createStore } from "../actions";
 import { prisma } from "@/lib/prisma";
 
 export default async function NewStorePage() {
-  let categories = [];
+  let categories: Array<{ id: string; name: string; slug: string }> = [];
   
   try {
     categories = await prisma.category.findMany({
