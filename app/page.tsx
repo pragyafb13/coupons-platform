@@ -14,7 +14,7 @@ export default async function HomePage() {
       where: { isActive: true },
       orderBy: { position: "asc" },
       take: 4,
-    });
+    }).catch(() => []);
   } catch (error) {
     // If Banner table doesn't exist or there's an error, use empty array
     console.error("Error fetching banners:", error);
