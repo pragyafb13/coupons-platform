@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prisma, queuedQuery } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 
 export default async function Footer() {
@@ -8,26 +8,11 @@ export default async function Footer() {
   let totalStores = 0;
 
   try {
-    // Fetch sequentially to reduce connection pool pressure
-    let couponsCount = 0;
-    let storesCount = 0;
-    
-    try {
-      couponsCount = await queuedQuery(() => prisma.coupon.count());
-    } catch (err) {
-      console.error("Error counting coupons in footer:", err);
-    }
-    
-    try {
-      storesCount = await queuedQuery(() => prisma.store.count());
-    } catch (err) {
-      console.error("Error counting stores in footer:", err);
-    }
-    
-    // Fetch categories separately
-    let categoriesData: Array<{ id: string; name: string; slug: string }> = [];
-    try {
-      categoriesData = await queuedQuery(() => prisma.category.findMany({
+    // Fetch all data in parallel
+    const [couponsCount, storesCount, categoriesData] = await Promise.all([
+      prisma.coupon.count().catch(() => 0),
+      prisma.store.count().catch(() => 0),
+      prisma.category.findMany({
         take: 8,
         orderBy: { name: "asc" },
         select: {
@@ -35,10 +20,8 @@ export default async function Footer() {
           name: true,
           slug: true,
         },
-      }));
-    } catch (err) {
-      console.error("Error fetching categories in footer:", err);
-    }
+      }).catch(() => []),
+    ]);
     
     categories = categoriesData;
     totalCoupons = couponsCount;
