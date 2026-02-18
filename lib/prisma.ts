@@ -5,10 +5,16 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Create Prisma client with optimized configuration for serverless
+// Configure connection pool for Vercel/serverless environments
 const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["error"] : ["error"],
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   });
 
 // Always cache Prisma client to prevent multiple instances
