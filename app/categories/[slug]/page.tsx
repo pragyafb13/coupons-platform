@@ -245,10 +245,10 @@ export default async function CategoryPage({
               </p>
               <Link
                 href="/coupons"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-800 transition shadow-lg"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-800 to-indigo-900 text-white px-6 py-3 rounded-xl font-extrabold hover:from-purple-900 hover:to-indigo-950 transition shadow-lg"
               >
                 Browse All Coupons
-                <span className="text-xl">→</span>
+                <span className="text-xl font-extrabold">→</span>
               </Link>
             </div>
           ) : (
@@ -351,14 +351,14 @@ export default async function CategoryPage({
           <div className="flex flex-wrap gap-4">
             <Link
               href="/categories"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-800 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-800 to-indigo-900 text-white px-6 py-3 rounded-xl font-extrabold hover:from-purple-900 hover:to-indigo-950 transition shadow-lg hover:shadow-xl"
             >
               <Grid3x3 className="h-5 w-5" />
               View All Categories
             </Link>
             <Link
               href="/coupons"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-800 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-800 to-indigo-900 text-white px-6 py-3 rounded-xl font-extrabold hover:from-purple-900 hover:to-indigo-950 transition shadow-lg hover:shadow-xl"
             >
               <Tag className="h-5 w-5" />
               Browse All Coupons
