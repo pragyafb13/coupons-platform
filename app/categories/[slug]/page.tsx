@@ -95,7 +95,7 @@ export default async function CategoryPage({
           {/* Back Button */}
           <Link
             href="/categories"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-6 font-medium transition group"
+            className="inline-flex items-center gap-2 text-white hover:text-white mb-6 font-medium transition group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition" />
             Back to Categories
@@ -345,7 +345,7 @@ export default async function CategoryPage({
             </Link>
             <Link
               href="/coupons"
-              className="inline-flex items-center gap-2 bg-white border-2 border-gray-300 text-gray-900 px-6 py-3 rounded-xl font-bold hover:border-purple-600 hover:text-purple-700 hover:bg-purple-50 transition shadow-sm hover:shadow-md"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-indigo-800 transition shadow-lg hover:shadow-xl"
             >
               <Tag className="h-5 w-5" />
               Browse All Coupons
