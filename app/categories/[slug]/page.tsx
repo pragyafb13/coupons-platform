@@ -14,33 +14,42 @@ export default async function CategoryPage({
   const { slug } = await params;
 
   let category;
+  let allCoupons: Array<{
+    id: string;
+    title: string;
+    code: string | null;
+    dealUrl: string | null;
+    expiryDate: Date | null;
+    isVerified: boolean;
+    status: string;
+    isActive: boolean;
+    store: {
+      id: string;
+      name: string;
+      logo: string | null;
+    };
+  }> = [];
+
   try {
+    // First, get the category
     category = await prisma.category.findUnique({
       where: { slug },
       include: {
-        coupons: {
+        stores: {
           include: {
-            coupon: {
+            store: {
               include: {
-                store: true,
-              },
-            },
-          },
-        },
-      stores: {
-        include: {
-          store: {
-            include: {
-              _count: {
-                select: {
-                  coupons: {
-                    where: {
-                      status: "ACTIVE",
-                      isActive: true,
-                      categories: {
-                        some: {
-                          category: {
-                            slug: slug,
+                _count: {
+                  select: {
+                    coupons: {
+                      where: {
+                        status: "ACTIVE",
+                        isActive: true,
+                        categories: {
+                          some: {
+                            category: {
+                              slug: slug,
+                            },
                           },
                         },
                       },
@@ -52,32 +61,36 @@ export default async function CategoryPage({
           },
         },
       },
-      _count: {
-        select: {
-          stores: true,
-          coupons: {
-            where: {
-              coupon: {
-                status: "ACTIVE",
-                isActive: true,
-              },
-            },
+    });
+
+    if (!category) notFound();
+
+    // Query coupons directly through CategoryCoupon for this category
+    const categoryCoupons = await prisma.categoryCoupon.findMany({
+      where: {
+        categoryId: category.id,
+      },
+      include: {
+        coupon: {
+          include: {
+            store: true,
           },
         },
       },
-    },
-  });
+    });
+
+    // Extract and filter coupons that are active
+    allCoupons = categoryCoupons
+      .map((cc) => cc.coupon)
+      .filter((coupon): coupon is NonNullable<typeof coupon> => 
+        coupon !== null && coupon.status === "ACTIVE" && coupon.isActive === true
+      );
   } catch (error) {
     console.error("Error fetching category:", error);
     notFound();
   }
 
   if (!category) notFound();
-
-  // Only get coupons that are directly assigned to this category and are active
-  const allCoupons = category.coupons
-    .map((c) => c.coupon)
-    .filter((coupon) => coupon && coupon.status === "ACTIVE" && coupon.isActive === true);
 
   // Get unique stores for this category
   const uniqueStores = category.stores
