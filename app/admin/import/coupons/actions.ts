@@ -83,9 +83,9 @@ export async function importCoupons(formData: FormData) {
             status,
             isVerified: row.is_verified === "true" || row.is_verified === "1",
             storeId,
-            categories: {
-              connect: categories.map((c) => ({ id: c.id })),
-            },
+            categories: categories.length > 0
+              ? { create: categories.map((c) => ({ categoryId: c.id })) }
+              : undefined,
           },
         });
         count++;
