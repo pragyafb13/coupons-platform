@@ -14,9 +14,10 @@ interface Category {
 
 interface HeaderProps {
   categories?: Category[];
+  isLoggedIn?: boolean;
 }
 
-export default function Header({ categories = [] }: HeaderProps) {
+export default function Header({ categories = [], isLoggedIn = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -138,6 +139,15 @@ export default function Header({ categories = [] }: HeaderProps) {
               Coupons
           </Link>
 
+          {isLoggedIn && (
+            <Link
+              href="/saved"
+              className="text-sm font-medium text-gray-700 hover:text-black transition"
+            >
+              Saved
+            </Link>
+          )}
+
           <Link
             href="/login"
             className="px-5 py-2.5 text-sm font-semibold rounded-xl border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md"
@@ -211,6 +221,15 @@ export default function Header({ categories = [] }: HeaderProps) {
             >
               Coupons
             </Link>
+            {isLoggedIn && (
+              <Link
+                href="/saved"
+                className="block px-2 py-2 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Saved
+              </Link>
+            )}
             <div className="pt-2 border-t border-gray-200 space-y-2">
               <Link
                 href="/login"

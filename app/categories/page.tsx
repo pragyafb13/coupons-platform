@@ -21,7 +21,14 @@ export default async function CategoriesPage() {
         _count: {
           select: {
             stores: true,
-            coupons: true,
+            coupons: {
+              where: {
+                coupon: {
+                  status: "ACTIVE",
+                  isActive: true,
+                },
+              },
+            },
           },
         },
       },

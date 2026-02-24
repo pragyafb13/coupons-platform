@@ -40,7 +40,7 @@ export default async function CouponDetailPage({ params }: Props) {
   const discount = discountMatch ? discountMatch[0] : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Back Button */}
         <Link
@@ -52,7 +52,7 @@ export default async function CouponDetailPage({ params }: Props) {
         </Link>
 
         {/* Main Card */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-premium border-2 border-gray-200 overflow-hidden">
           {/* Header Section */}
           <div className="bg-gradient-to-r from-gray-900 to-black p-6 sm:p-8 text-white relative">
             {discount && (

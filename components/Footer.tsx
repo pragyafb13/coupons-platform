@@ -5,7 +5,7 @@ import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 
 async function getFooterData() {
   const [couponsCount, storesCount, categoriesData] = await Promise.all([
-    prisma.coupon.count().catch(() => 0),
+    prisma.coupon.count({ where: { status: "ACTIVE", isActive: true } }).catch(() => 0),
     prisma.store.count().catch(() => 0),
     prisma.category.findMany({
       take: 8,

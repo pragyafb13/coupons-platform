@@ -5,19 +5,21 @@ import Link from "next/link";
 
 export default function AdvertisePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="text-center mb-8 sm:mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Megaphone className="h-8 w-8 text-purple-500" />
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Advertise with DealStack</h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <section className="bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-600 text-white py-16 sm:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 mb-6">
+            <Megaphone className="h-5 w-5" />
+            <span className="text-sm font-semibold">Partnerships</span>
           </div>
-          <p className="text-gray-600 text-lg">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">Advertise with DealStack</h1>
+          <p className="text-lg text-white/90 max-w-xl">
             Reach millions of deal-seekers and grow your business
           </p>
         </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-12 space-y-8">
+      </section>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 -mt-8 relative z-10">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-premium border-2 border-gray-200 p-8 sm:p-12 space-y-8">
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Why Advertise on DealStack?</h2>
             <div className="grid sm:grid-cols-2 gap-6">

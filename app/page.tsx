@@ -30,7 +30,7 @@ export default async function HomePage() {
   try {
     // Fetch all data in parallel with Promise.all for better performance
     const [totalCouponsResult, totalStoresResult, categoriesResult, featuredCouponsResult, featuredStoresResult] = await Promise.all([
-      prisma.coupon.count().catch(() => 0),
+      prisma.coupon.count({ where: { status: "ACTIVE", isActive: true } }).catch(() => 0),
       prisma.store.count().catch(() => 0),
       prisma.category.findMany({
         take: 6,
@@ -39,6 +39,7 @@ export default async function HomePage() {
       prisma.coupon.findMany({
         where: {
           status: "ACTIVE",
+          isActive: true,
         },
         include: { store: true },
         orderBy: [{ isVerified: "desc" }, { createdAt: "desc" }],

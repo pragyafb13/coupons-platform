@@ -1,12 +1,25 @@
 export const dynamic = "force-dynamic";
 
-import { Info } from "lucide-react";
+import Link from "next/link";
+import { Info, ArrowRight } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-12">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <section className="bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 text-white py-16 sm:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 mb-6">
+            <Info className="h-5 w-5" />
+            <span className="text-sm font-semibold">About Us</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">About DealStack</h1>
+          <p className="text-lg text-white/90 max-w-2xl">
+            Your ultimate destination for verified coupons and exclusive deals
+          </p>
+        </div>
+      </section>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 -mt-8 relative z-10">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-premium border-2 border-gray-200 p-8 sm:p-12">
           <div className="flex items-center gap-3 mb-6">
             <Info className="h-8 w-8 text-blue-500" />
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">About DealStack</h1>
@@ -48,9 +61,16 @@ export default function AboutPage() {
 
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Us</h2>
-              <p className="leading-relaxed">
-                Have questions or suggestions? We'd love to hear from you! Visit our <a href="/contact" className="text-blue-600 hover:underline">Contact page</a> to get in touch.
+              <p className="leading-relaxed mb-4">
+                Have questions or suggestions? We&apos;d love to hear from you!
               </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition"
+              >
+                Get in touch
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </section>
           </div>
         </div>

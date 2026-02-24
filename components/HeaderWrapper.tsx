@@ -1,4 +1,5 @@
 import { unstable_cache } from "next/cache";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import Header from "./Header";
 
@@ -14,11 +15,9 @@ const getHeaderCategories = unstable_cache(
 );
 
 export default async function HeaderWrapper() {
-  let categories: Array<{ id: string; name: string; slug: string }> = [];
-  try {
-    categories = await getHeaderCategories();
-  } catch (error) {
-    console.error("Error fetching categories for header:", error);
-  }
-  return <Header categories={categories} />;
+  const [session, categories] = await Promise.all([
+    auth(),
+    getHeaderCategories().catch(() => []),
+  ]);
+  return <Header categories={categories} isLoggedIn={!!session?.user} />;
 }
