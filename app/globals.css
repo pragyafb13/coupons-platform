@@ -123,6 +123,15 @@ button[class*="bg-gray-900"] {
   color: rgb(255 255 255) !important;
 }
 
+/* Footer: ensure light purple text overrides global link color */
+footer a.text-purple-200,
+footer a[class*="text-purple"] {
+  color: rgb(233 213 255) !important;
+}
+footer a:hover {
+  color: rgb(243 232 255) !important;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
