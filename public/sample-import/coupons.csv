@@ -1,0 +1,60 @@
+title,store_slug,code,type,deal_url,expiry_date,status,is_verified,categories
+15% off on first order,ajio,AJIO15,code,,2025-12-31,ACTIVE,true,fashion
+Flat 25% off on fashion,ajio,AJIO25,code,,2025-11-30,ACTIVE,true,fashion,clothing
+Extra 10% off on electronics,amazon,AMZELEC10,code,,2026-01-15,ACTIVE,true,electronics
+Up to 50% off on books,amazon,,deal,https://amazon.in/books,2025-12-25,ACTIVE,true,books
+20% off on grocery,amazon,AMZGROC20,code,,2025-10-31,ACTIVE,true,grocery
+Flat 30% off fashion,amazon,AMZFASH30,code,,2025-12-01,ACTIVE,true,fashion
+10% off entire order,flipkart,FLIP10,code,,2025-11-20,ACTIVE,true,electronics
+Up to 40% off mobiles,flipkart,,deal,https://flipkart.com/mobiles,2025-12-31,ACTIVE,true,electronics
+Extra 15% off clothing,flipkart,FLIPCLOTH15,code,,2025-11-15,ACTIVE,true,clothing,fashion
+25% off on gaming,flipkart,FLIPGAME25,code,,2026-01-10,ACTIVE,true,gaming
+30% off on beauty products,myntra,MYNTRA30,code,,2025-12-20,ACTIVE,true,fashion
+Flat 40% off footwear,myntra,MYNFOOT40,code,,2025-11-25,ACTIVE,true,footwear,fashion
+Buy 2 Get 1 free,myntra,,deal,https://myntra.com/offers,2025-12-15,ACTIVE,false,clothing
+20% off on makeup,nykaa,NYBEAUTY20,code,,2025-12-31,ACTIVE,true,beauty
+Flat 15% off skincare,nykaa,NYSKIN15,code,,2025-11-30,ACTIVE,true,beauty,health
+500 off on first order,nykaa,NY500,code,,2026-01-31,ACTIVE,true,beauty
+Extra 25% off on shoes,nike,NIKE25,code,,2025-12-25,ACTIVE,true,footwear
+30% off on sportswear,nike,NIKEFIT30,code,,2025-11-20,ACTIVE,true,fitness,footwear
+15% off running gear,nike,,deal,https://nike.com/running,2025-12-10,ACTIVE,true,fitness
+Up to 20% off flights,makemytrip,MMT20,code,,2025-12-31,ACTIVE,true,fashion
+Flat 15% off hotels,makemytrip,MMTHOTEL15,code,,2025-11-15,ACTIVE,true,fashion
+10% off on bookings,goibibo,GO10,code,,2025-12-20,ACTIVE,true,fashion
+500 off first order,bigbasket,BB500,code,,2026-01-15,ACTIVE,true,grocery
+20% off on essentials,bigbasket,BBESS20,code,,2025-11-30,ACTIVE,true,grocery
+15% off baby products,firstcry,FC15,code,,2025-12-25,ACTIVE,true,fashion
+Flat 25% off kids wear,firstcry,FCRY25,code,,2025-12-01,ACTIVE,true,fashion,clothing
+30% off on medicines,pharmeasy,PE30,code,,2025-12-31,ACTIVE,true,health
+100 off on health orders,pharmeasy,PE100,code,,2025-11-20,ACTIVE,true,health
+Free delivery,pharmeasy,,deal,https://pharmeasy.in,2026-01-31,ACTIVE,true,health
+Up to 50% off electronics,tatacliq,TCLIQ50,code,,2025-12-15,ACTIVE,true,electronics
+25% off fashion,tatacliq,TCLIQ25,code,,2025-11-25,ACTIVE,true,fashion
+Flat 20% off,snapdeal,SNAP20,code,,2025-12-20,ACTIVE,false,electronics
+15% off fashion,snapdeal,SNAP15,code,,2025-11-10,ACTIVE,false,fashion
+10% off grocery,snapdeal,SNAPGROC10,code,,2026-01-10,ACTIVE,false,grocery
+Extra 5% cashback,paytm-mall,PAYTM5,code,,2025-12-31,ACTIVE,false,electronics
+10% off on fashion,paytm-mall,PAYTM10,code,,2025-11-30,ACTIVE,false,fashion
+50% off first class,cultfit,CULT50,code,,2026-01-15,ACTIVE,true,fitness
+Free trial session,cultfit,,deal,https://cult.fit/trial,2025-12-25,ACTIVE,true,fitness,health
+20% off membership,cultfit,CULT20,code,,2025-11-15,ACTIVE,true,fitness
+100 off on food,swiggy,SWIGGY100,code,,2025-12-31,ACTIVE,true,grocery
+Free delivery,swiggy,,deal,https://swiggy.com,2025-12-20,ACTIVE,true,grocery
+150 off on orders,zomato,ZOM150,code,,2025-11-25,ACTIVE,true,grocery
+20% off dining,zomato,ZOM20,code,,2026-01-10,ACTIVE,true,grocery
+Flat 500 off eyewear,lenskart,LK500,code,,2025-12-15,ACTIVE,true,fashion
+25% off on glasses,lenskart,LK25,code,,2025-11-20,ACTIVE,true,health,fashion
+15% off sports gear,decathlon,DEC15,code,,2025-12-31,ACTIVE,true,fitness
+30% off on footwear,decathlon,DEC30,code,,2025-12-10,ACTIVE,true,footwear,fitness
+20% off gaming,decathlon,DECGAME20,code,,2026-01-20,ACTIVE,true,gaming
+100 off on pizza,dominos,DOM100,code,,2025-12-25,ACTIVE,true,grocery
+Buy 1 Get 1 free,dominos,,deal,https://dominos.co.in/offers,2025-11-30,ACTIVE,true,grocery
+15% off on electronics,amazon,AMZ15,code,,2026-02-28,ACTIVE,true,electronics
+Flat 200 off books,amazon,BOOK200,code,,2025-12-31,ACTIVE,true,books
+10% off fitness gear,flipkart,FLIPFIT10,code,,2025-11-15,ACTIVE,true,fitness
+20% off beauty,myntra,MYNBEAUTY20,code,,2026-01-31,ACTIVE,true,beauty
+Extra 10% off health,nykaa,NYHEALTH10,code,,2025-12-20,ACTIVE,true,health
+15% off apparel,nike,NIKEAPP15,code,,2025-11-25,ACTIVE,true,clothing
+Up to 30% off grocery,bigbasket,BB30,code,,2026-01-15,ACTIVE,true,grocery
+20% off baby care,firstcry,FCBABY20,code,,2025-12-10,ACTIVE,true,health
+25% off first order,pharmeasy,PE25,code,,2025-12-31,ACTIVE,true,health

@@ -7,6 +7,14 @@ export default function ImportCouponsPage() {
     <div className="max-w-xl mx-auto py-10 space-y-6">
       <h1 className="text-2xl font-semibold">Import Coupons (CSV)</h1>
 
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <p className="text-sm font-medium text-gray-700 mb-2">Sample CSV</p>
+        <p className="text-xs text-gray-600 mb-2">Import categories and stores first. Uses store_slug.</p>
+        <a href="/sample-import/coupons.csv" download className="text-blue-600 hover:underline text-sm">
+          Download coupons.csv (59 coupons)
+        </a>
+      </div>
+
       <form action={importCoupons} className="space-y-4">
         <input
           type="file"
