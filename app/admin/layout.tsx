@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import LogoutButton from "@/components/LogoutButton";
 import { LayoutDashboard, Store, TicketPercent, Folder, Upload, Image as ImageIcon } from "lucide-react";
 
@@ -14,6 +15,15 @@ export default async function AdminLayout({
   // 🔐 Redirect to login if not authenticated
   if (!session) {
     redirect("/login");
+  }
+
+  // 🔐 Only ADMIN role can access admin panel
+  const user = await prisma.user.findUnique({
+    where: { email: session.user?.email || "" },
+    select: { role: true },
+  });
+  if (user?.role !== "ADMIN") {
+    redirect("/");
   }
 
   return (

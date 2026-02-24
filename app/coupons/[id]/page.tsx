@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Clock, CheckCircle2, ExternalLink, Tag } from "lucide-react";
 import CopyButton from "./CopyButton";
+import SaveCouponButton from "@/components/SaveCouponButton";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -61,12 +62,15 @@ export default async function CouponDetailPage({ params }: Props) {
               </div>
             )}
             
-            {coupon.isVerified && (
-              <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" />
-                Verified
-              </div>
-            )}
+            <div className="absolute top-4 left-4 flex items-center gap-2">
+              <SaveCouponButton couponId={coupon.id} />
+              {coupon.isVerified && (
+                <div className="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Verified
+                </div>
+              )}
+            </div>
 
             <div className="mt-8 sm:mt-12 pr-24">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 leading-tight">

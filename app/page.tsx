@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { Flame, Sparkles, Shield, TrendingUp, Star, CheckCircle2, Zap } from "lucide-react";
+import SaveCouponButton from "@/components/SaveCouponButton";
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 export default async function HomePage() {
@@ -335,10 +336,13 @@ export default async function HomePage() {
                     </div>
                   )}
 
-                  {/* Verified Badge */}
-                  <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-lg flex items-center gap-1 z-10">
-                    <CheckCircle2 className="h-3 w-3" />
-                    Verified
+                  {/* Save + Verified */}
+                  <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+                    <SaveCouponButton couponId={coupon.id} />
+                    <div className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-lg flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Verified
+                    </div>
                   </div>
 
                   {/* Store Image/Logo Section */}

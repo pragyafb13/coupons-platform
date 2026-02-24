@@ -1,6 +1,8 @@
 export const dynamic = "force-dynamic";
 
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import ContactForm from "./ContactForm";
+import { siteConfig } from "@/lib/site-config";
 
 export default function ContactPage() {
   return (
@@ -28,8 +30,8 @@ export default function ContactPage() {
                 <Mail className="h-6 w-6 text-blue-500 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                  <a href="mailto:support@dealstack.com" className="text-gray-600 hover:text-blue-600 transition">
-                    support@dealstack.com
+                  <a href={`mailto:${siteConfig.contact.email}`} className="text-gray-600 hover:text-blue-600 transition">
+                    {siteConfig.contact.email}
                   </a>
                 </div>
               </div>
@@ -37,20 +39,20 @@ export default function ContactPage() {
                 <Phone className="h-6 w-6 text-blue-500 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
-                  <a href="tel:+1234567890" className="text-gray-600 hover:text-blue-600 transition">
-                    +1 (234) 567-890
-                  </a>
+                  {siteConfig.contact.phone.replace(/\D/g, "").length >= 10 ? (
+                    <a href={`tel:${siteConfig.contact.phone.replace(/\D/g, "")}`} className="text-gray-600 hover:text-blue-600 transition">
+                      {siteConfig.contact.phone}
+                    </a>
+                  ) : (
+                    <span className="text-gray-600">{siteConfig.contact.phone}</span>
+                  )}
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <MapPin className="h-6 w-6 text-blue-500 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
-                  <p className="text-gray-600">
-                    123 Deal Street<br />
-                    Savings City, SC 12345<br />
-                    United States
-                  </p>
+                  <p className="text-gray-600 whitespace-pre-line">{siteConfig.contact.address}</p>
                 </div>
               </div>
             </div>
@@ -59,63 +61,7 @@ export default function ContactPage() {
           {/* Contact Form */}
           <div className="bg-white rounded-2xl shadow-premium border-2 border-gray-200 p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
-                  required
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition flex items-center justify-center gap-2"
-              >
-                <Send className="h-5 w-5" />
-                Send Message
-              </button>
-            </form>
+            <ContactForm />
           </div>
         </div>
       </div>

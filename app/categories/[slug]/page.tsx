@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { Grid3x3, ArrowLeft, Flame, CheckCircle2, Clock, Zap, Store as StoreIcon, Tag, TrendingUp } from "lucide-react";
+import SaveCouponButton from "@/components/SaveCouponButton";
 
 export default async function CategoryPage({
   params,
@@ -271,13 +272,16 @@ export default async function CategoryPage({
                       </div>
                     )}
 
-                    {/* Verified Badge */}
-                    {coupon.isVerified && (
-                      <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 z-10 shadow-lg">
-                        <CheckCircle2 className="h-3 w-3" />
-                        Verified
-                      </div>
-                    )}
+                    {/* Save + Verified Badges */}
+                    <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+                      <SaveCouponButton couponId={coupon.id} />
+                      {coupon.isVerified && (
+                        <div className="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-lg">
+                          <CheckCircle2 className="h-3 w-3" />
+                          Verified
+                        </div>
+                      )}
+                    </div>
 
                     {/* Store Logo/Name */}
                     <div className="flex items-center gap-4 mb-6 pr-24">

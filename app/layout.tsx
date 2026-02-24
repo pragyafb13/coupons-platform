@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 
 import "./globals.css";
-import { ReactNode } from "react";
 import Providers from "./providers";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   title: {
@@ -42,6 +42,7 @@ export default function RootLayout({
           <HeaderWrapper />
           <main className="flex-1">{children}</main>
           <Footer />
+          <Analytics />
         </Providers>
       </body>
     </html>

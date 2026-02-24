@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { Megaphone, TrendingUp, Users, BarChart3 } from "lucide-react";
 import Link from "next/link";
+import { siteConfig } from "@/lib/site-config";
 
 export default function AdvertisePage() {
   return (
@@ -114,7 +115,7 @@ export default function AdvertisePage() {
                 Contact Us
               </Link>
               <a
-                href="mailto:advertise@dealstack.com"
+                href={`mailto:${siteConfig.advertiseEmail}`}
                 className="flex-1 bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition text-center"
               >
                 Email Us

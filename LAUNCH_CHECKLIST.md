@@ -32,17 +32,17 @@
 
 ### Critical
 1. **Database connection pooler** – If using Neon/Supabase, ensure you use the **pooled** connection URL in Vercel env (see DATABASE_SETUP.md)
-2. **Contact form** – Currently no backend. Options: Formspree, Resend, or custom API route
-3. **Replace placeholder content** – Contact page (phone, address, email) with real info
-4. **Admin protection** – Verify `/admin` routes require auth
+2. ~~**Contact form**~~ – ✅ Formspree integrated; set `NEXT_PUBLIC_FORMSPREE_FORM_ID` in env (see ENV_EXAMPLE.md)
+3. ~~**Replace placeholder content**~~ – ✅ Contact info from `lib/site-config.ts`; override with `CONTACT_EMAIL`, `CONTACT_PHONE`, `CONTACT_ADDRESS` (pixelrings.com defaults)
+4. ~~**Admin protection**~~ – ✅ Admin layout requires auth + ADMIN role
 
 ### Nice to Have
-- **Saved coupons** – Add heart/save button on coupon cards (API exists at `/api/save-coupon`)
+- ~~**Saved coupons**~~ – ✅ Heart/save button on all coupon cards (homepage, coupons, categories, search, store, coupon detail)
 - **Newsletter signup** – Email capture in footer
-- **Sitemap** – `app/sitemap.ts` for SEO
-- **robots.txt** – Allow crawling
-- **Analytics** – Google Analytics or Vercel Analytics
-- **Error monitoring** – Sentry or similar
+- ~~**Sitemap**~~ – ✅ `app/sitemap.ts` generates dynamic sitemap
+- **robots.txt** – Allow crawling (optional)
+- ~~**Analytics**~~ – ✅ Vercel Analytics added
+- ~~**Error monitoring**~~ – ✅ Sentry configured; set `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN`
 - **Favicon** – Ensure custom favicon is set
 - **PWA** – Manifest for "Add to Home Screen"
 

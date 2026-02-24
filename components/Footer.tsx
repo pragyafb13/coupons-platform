@@ -2,6 +2,7 @@ import Link from "next/link";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
+import { siteConfig } from "@/lib/site-config";
 
 async function getFooterData() {
   const [couponsCount, storesCount, categoriesData] = await Promise.all([
@@ -59,7 +60,7 @@ export default async function Footer() {
               <a href="#" className="text-purple-200 hover:text-purple-100 transition" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-purple-200 hover:text-purple-100 transition" aria-label="Email">
+              <a href={`mailto:${siteConfig.supportEmail}`} className="text-purple-200 hover:text-purple-100 transition" aria-label="Email">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
