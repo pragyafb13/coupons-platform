@@ -1,6 +1,22 @@
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
+
+async function getFooterData() {
+  const [couponsCount, storesCount, categoriesData] = await Promise.all([
+    prisma.coupon.count().catch(() => 0),
+    prisma.store.count().catch(() => 0),
+    prisma.category.findMany({
+      take: 8,
+      orderBy: { name: "asc" },
+      select: { id: true, name: true, slug: true },
+    }).catch(() => []),
+  ]);
+  return { categories: categoriesData, totalCoupons: couponsCount, totalStores: storesCount };
+}
+
+const getCachedFooterData = unstable_cache(getFooterData, ["footer-stats"], { revalidate: 60 });
 
 export default async function Footer() {
   let categories: Array<{ id: string; name: string; slug: string }> = [];
@@ -8,30 +24,12 @@ export default async function Footer() {
   let totalStores = 0;
 
   try {
-    // Fetch all data in parallel
-    const [couponsCount, storesCount, categoriesData] = await Promise.all([
-      prisma.coupon.count().catch(() => 0),
-      prisma.store.count().catch(() => 0),
-      prisma.category.findMany({
-        take: 8,
-        orderBy: { name: "asc" },
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
-      }).catch(() => []),
-    ]);
-    
-    categories = categoriesData;
-    totalCoupons = couponsCount;
-    totalStores = storesCount;
+    const data = await getCachedFooterData();
+    categories = data.categories;
+    totalCoupons = data.totalCoupons;
+    totalStores = data.totalStores;
   } catch (error) {
     console.error("Error fetching footer data:", error);
-    // Use default values if queries fail
-    categories = [];
-    totalCoupons = 0;
-    totalStores = 0;
   }
 
   return (

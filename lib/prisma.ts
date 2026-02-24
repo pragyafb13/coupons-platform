@@ -4,15 +4,26 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+// Build database URL with connection_limit for serverless (prevents "max clients reached")
+function getDatabaseUrl(): string | undefined {
+  const url = process.env.DATABASE_URL;
+  if (!url) return undefined;
+  // In serverless (Vercel), limit to 1 connection per instance to avoid pool exhaustion
+  if (process.env.VERCEL && !url.includes("connection_limit=")) {
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}connection_limit=1`;
+  }
+  return url;
+}
+
 // Create Prisma client with optimized configuration for serverless
-// Configure connection pool for Vercel/serverless environments
 const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["error"] : ["error"],
     datasources: {
       db: {
-        url: process.env.DATABASE_URL,
+        url: getDatabaseUrl(),
       },
     },
   });
