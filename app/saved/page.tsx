@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 
 export default async function SavedPage() {
-  const session = await auth();
+    const session = await auth();
 
   if (!session?.user?.email) {
     return (
@@ -33,19 +33,19 @@ export default async function SavedPage() {
 
   try {
     user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+    where: { email: session.user.email },
+  });
 
     if (user) {
       saved = await prisma.savedCoupon.findMany({
         where: { userId: user.id },
-        include: {
-          coupon: {
-            include: { store: true },
-          },
-        },
+    include: {
+      coupon: {
+        include: { store: true },
+      },
+    },
         orderBy: { createdAt: "desc" },
-      });
+  });
     }
   } catch (error) {
     console.error("Error fetching saved coupons:", error);
@@ -61,27 +61,27 @@ export default async function SavedPage() {
           <p className="text-gray-500 text-lg">You haven't saved any coupons yet.</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-6">
-          {saved.map((item) => (
+      <div className="grid md:grid-cols-2 gap-6">
+        {saved.map((item) => (
             <div key={item.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition">
               <p className="text-sm text-gray-500 mb-2">
                 {item.coupon.store?.name || "Unknown Store"}
-              </p>
+            </p>
               <h3 className="font-semibold text-gray-900 mb-4">
-                {item.coupon.title}
-              </h3>
+              {item.coupon.title}
+            </h3>
               {item.coupon.code ? (
                 <div className="bg-gray-100 p-3 rounded-lg text-center font-mono text-sm">
-                  {item.coupon.code}
-                </div>
+              {item.coupon.code}
+            </div>
               ) : (
                 <div className="bg-blue-50 border border-blue-200 p-3 rounded-lg text-center text-sm text-blue-700">
                   Deal Only
                 </div>
               )}
-            </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
       )}
     </div>
   );

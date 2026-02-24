@@ -245,7 +245,7 @@ export default async function CategoryPage({
               </p>
               <Link
                 href="/coupons"
-                className="inline-flex items-center gap-2 bg-purple-200 text-purple-900 px-6 py-3 rounded-xl font-extrabold hover:bg-purple-300 transition shadow-lg"
+                className="inline-flex items-center gap-2 bg-purple-100 text-gray-900 px-6 py-3 rounded-xl font-extrabold hover:bg-purple-200 transition shadow-lg"
               >
                 Browse All Coupons
                 <span className="text-xl font-extrabold">→</span>
@@ -351,16 +351,16 @@ export default async function CategoryPage({
           <div className="flex flex-wrap gap-4">
             <Link
               href="/categories"
-              className="inline-flex items-center gap-2 bg-purple-200 text-purple-900 px-6 py-3 rounded-xl font-extrabold hover:bg-purple-300 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-purple-100 text-gray-900 px-6 py-3 rounded-xl font-extrabold hover:bg-purple-200 transition shadow-lg hover:shadow-xl"
             >
-              <Grid3x3 className="h-5 w-5" />
+              <Grid3x3 className="h-5 w-5 text-gray-900" />
               View All Categories
             </Link>
             <Link
               href="/coupons"
-              className="inline-flex items-center gap-2 bg-purple-200 text-purple-900 px-6 py-3 rounded-xl font-extrabold hover:bg-purple-300 transition shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 bg-purple-100 text-gray-900 px-6 py-3 rounded-xl font-extrabold hover:bg-purple-200 transition shadow-lg hover:shadow-xl"
             >
-              <Tag className="h-5 w-5" />
+              <Tag className="h-5 w-5 text-gray-900" />
               Browse All Coupons
             </Link>
           </div>

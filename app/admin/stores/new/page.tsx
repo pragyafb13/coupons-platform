@@ -8,8 +8,8 @@ export default async function NewStorePage() {
   
   try {
     categories = await prisma.category.findMany({
-      orderBy: { name: "asc" },
-    });
+    orderBy: { name: "asc" },
+  });
   } catch (error) {
     console.error("Error fetching categories:", error);
     categories = [];
@@ -30,43 +30,43 @@ export default async function NewStorePage() {
             <label className="block text-sm font-medium text-gray-700">
               Store Name <span className="text-red-500">*</span>
             </label>
-            <input
-              name="name"
-              required
+          <input
+            name="name"
+            required
               placeholder="e.g., Amazon"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition"
-            />
-          </div>
+          />
+        </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Slug <span className="text-red-500">*</span>
             </label>
-            <input
-              name="slug"
-              required
+          <input
+            name="slug"
+            required
               placeholder="e.g., amazon"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition"
-            />
+          />
             <p className="text-xs text-gray-500">
               URL-friendly identifier (lowercase, no spaces)
             </p>
-          </div>
+        </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Affiliate URL
             </label>
-            <input
-              name="affiliateUrl"
+          <input
+            name="affiliateUrl"
               type="url"
               placeholder="https://example.com/affiliate-link"
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition"
-            />
+          />
             <p className="text-xs text-gray-500">
               Optional affiliate tracking URL
             </p>
-          </div>
+        </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -97,7 +97,7 @@ export default async function NewStorePage() {
             <p className="text-xs text-gray-500 mt-1">
               Select one or more categories for this store
             </p>
-          </div>
+        </div>
 
           <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <input
@@ -114,17 +114,17 @@ export default async function NewStorePage() {
                 Featured stores appear prominently on the homepage
               </p>
             </div>
-          </div>
+        </div>
 
           <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
             <button
               type="submit"
               className="bg-black text-white px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-sm"
             >
-              Create Store
-            </button>
+          Create Store
+        </button>
           </div>
-        </form>
+      </form>
       </div>
     </div>
   );

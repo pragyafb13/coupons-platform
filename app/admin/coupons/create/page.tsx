@@ -66,13 +66,13 @@ export default async function CreateCouponPage() {
             Store <span className="text-red-500">*</span>
           </label>
           <select name="storeId" required className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition">
-            <option value="">Select Store</option>
-            {stores.map((store) => (
-              <option key={store.id} value={store.id}>
-                {store.name}
-              </option>
-            ))}
-          </select>
+          <option value="">Select Store</option>
+          {stores.map((store) => (
+            <option key={store.id} value={store.id}>
+              {store.name}
+            </option>
+          ))}
+        </select>
         </div>
 
         {/* 🔥 CATEGORY MULTI-SELECT WITH CHECKBOXES */}
@@ -85,7 +85,7 @@ export default async function CreateCouponPage() {
               <p className="text-gray-500 text-sm">No categories available. Please create categories first.</p>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {categories.map((cat) => (
+          {categories.map((cat) => (
                   <label
                     key={cat.id}
                     className="flex items-center gap-2 p-2 rounded hover:bg-white cursor-pointer transition"
@@ -98,7 +98,7 @@ export default async function CreateCouponPage() {
                     />
                     <span className="text-sm text-gray-700 flex-1">{cat.name}</span>
                   </label>
-                ))}
+          ))}
               </div>
             )}
           </div>
@@ -112,11 +112,11 @@ export default async function CreateCouponPage() {
             Status <span className="text-red-500">*</span>
           </label>
           <select name="status" required className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-black focus:border-black outline-none transition">
-            <option value={CouponStatus.ACTIVE}>Active</option>
-            <option value={CouponStatus.INACTIVE}>Inactive</option>
-            <option value={CouponStatus.EXPIRED}>Expired</option>
-            <option value={CouponStatus.SCHEDULED}>Scheduled</option>
-          </select>
+          <option value={CouponStatus.ACTIVE}>Active</option>
+          <option value={CouponStatus.INACTIVE}>Inactive</option>
+          <option value={CouponStatus.EXPIRED}>Expired</option>
+          <option value={CouponStatus.SCHEDULED}>Scheduled</option>
+        </select>
         </div>
 
         <div>

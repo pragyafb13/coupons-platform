@@ -113,6 +113,16 @@ a {
   transition: all 0.2s ease;
 }
 
+/* Force white text on dark/black button-style links and buttons - overrides purple link color */
+a.text-white,
+a[class*="bg-black"],
+a[class*="bg-gray-900"],
+button.text-white,
+button[class*="bg-black"],
+button[class*="bg-gray-900"] {
+  color: rgb(255 255 255) !important;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

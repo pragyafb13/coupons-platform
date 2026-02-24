@@ -345,21 +345,21 @@ export default async function HomePage() {
                     {coupon.store.logo ? (
                       <div className="absolute inset-0 flex items-center justify-center p-8">
                         <div className="relative w-full h-full max-w-[200px] max-h-[120px]">
-                          <Image
-                            src={coupon.store.logo}
-                            alt={coupon.store.name}
+                        <Image
+                          src={coupon.store.logo}
+                          alt={coupon.store.name}
                             fill
                             className="object-contain group-hover:scale-110 transition-transform duration-300"
                             sizes="(max-width: 768px) 100vw, 200px"
-                          />
+                        />
                         </div>
                       </div>
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                           <span className="font-extrabold text-white text-4xl">
-                            {coupon.store.name.charAt(0)}
-                          </span>
+                          {coupon.store.name.charAt(0)}
+                        </span>
                         </div>
                       </div>
                     )}
@@ -378,15 +378,15 @@ export default async function HomePage() {
 
                     {/* Coupon Title */}
                     <h3 className="text-lg sm:text-xl font-extrabold mb-4 group-hover:text-red-600 transition line-clamp-2 min-h-[3.5rem] text-gray-900 leading-tight">
-                      {coupon.title}
-                    </h3>
+                    {coupon.title}
+                  </h3>
 
                     {/* Coupon Code */}
-                    {coupon.code && (
+                  {coupon.code && (
                       <div className="border-2 border-dashed border-yellow-500 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl py-4 text-center font-mono text-lg sm:text-xl mb-6 text-gray-900 font-extrabold tracking-wider shadow-inner">
-                        {coupon.code}
-                      </div>
-                    )}
+                      {coupon.code}
+                    </div>
+                  )}
 
                     {/* Dynamic Button */}
                     <div className={`text-center py-4 rounded-xl font-bold text-base sm:text-lg transition shadow-lg ${

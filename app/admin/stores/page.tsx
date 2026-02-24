@@ -32,7 +32,7 @@ export default async function AdminStoresPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-8">
-        <div>
+    <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Stores</h2>
           <p className="text-gray-600">Manage all stores on the platform</p>
         </div>
@@ -58,20 +58,20 @@ export default async function AdminStoresPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
+          <tr>
                 <th className="text-left px-6 py-4 font-semibold text-gray-700">Name</th>
                 <th className="text-left px-6 py-4 font-semibold text-gray-700">Slug</th>
                 <th className="text-left px-6 py-4 font-semibold text-gray-700">Categories</th>
                 <th className="text-left px-6 py-4 font-semibold text-gray-700">Featured</th>
                 <th className="text-left px-6 py-4 font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stores.map((store) => (
-                <tr
-                  key={store.id}
+          </tr>
+        </thead>
+        <tbody>
+          {stores.map((store) => (
+            <tr
+              key={store.id}
                   className="border-b border-gray-100 last:border-none hover:bg-gray-50 transition"
-                >
+            >
                   <td className="px-6 py-4">
                     <div className="font-medium text-gray-900">{store.name}</div>
                   </td>
@@ -80,23 +80,23 @@ export default async function AdminStoresPage() {
                       {store.slug}
                     </code>
                   </td>
-                  
+              
                   <td className="px-6 py-4">
-                    {store.categories && store.categories.length > 0 ? (
+                {store.categories && store.categories.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
-                        {store.categories.map((sc) => (
-                          <span
-                            key={sc.category.id}
+                    {store.categories.map((sc) => (
+                      <span
+                        key={sc.category.id}
                             className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-full border border-blue-200"
-                          >
-                            {sc.category.name}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
+                      >
+                        {sc.category.name}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
                       <span className="text-gray-400 text-sm">No categories</span>
-                    )}
-                  </td>
+                )}
+              </td>
 
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
@@ -108,39 +108,39 @@ export default async function AdminStoresPage() {
                         {store.isFeatured ? "✓ Featured" : "—"}
                       </span>
                       <form action={toggleFeaturedAction.bind(null, store.id)} className="inline">
-                        <button
-                          type="submit"
+                  <button
+                    type="submit"
                           className="text-sm font-medium text-blue-600 hover:text-blue-800 transition"
-                        >
-                          Toggle
-                        </button>
-                      </form>
+                  >
+                    Toggle
+                  </button>
+                </form>
                     </div>
-                  </td>
+              </td>
 
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
-                      <Link
-                        href={`/admin/stores/${store.id}/edit`}
+                <Link
+                  href={`/admin/stores/${store.id}/edit`}
                         className="text-sm font-medium text-blue-600 hover:text-blue-800 transition"
-                      >
-                        Edit
-                      </Link>
+                >
+                  Edit
+                </Link>
                       <form action={deleteStore} className="inline">
-                        <input type="hidden" name="id" value={store.id} />
-                        <button
-                          type="submit"
+  <input type="hidden" name="id" value={store.id} />
+  <button
+    type="submit"
                           className="text-sm font-medium text-red-600 hover:text-red-800 transition"
-                        >
-                          Delete
-                        </button>
-                      </form>
+  >
+    Delete
+  </button>
+</form>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
         </div>
       )}
     </div>
