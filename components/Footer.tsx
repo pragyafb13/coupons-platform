@@ -35,7 +35,7 @@ export default async function Footer() {
   }
 
   return (
-    <footer className="bg-gray-900 text-gray-300 border-t border-gray-800">
+    <footer className="bg-gray-900 text-purple-300 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Top grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
@@ -45,23 +45,23 @@ export default async function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-red-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">D</span>
               </div>
-              <h2 className="text-xl font-bold text-white">DealStack</h2>
+              <h2 className="text-xl font-bold text-purple-200">DealStack</h2>
             </div>
-            <p className="text-sm text-gray-400 mb-4 leading-relaxed">
+            <p className="text-sm text-purple-300/90 mb-4 leading-relaxed">
               Discover the best coupons, promo codes and exclusive deals
               updated daily. Save more on every purchase.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Facebook">
+              <a href="#" className="text-purple-300 hover:text-purple-200 transition" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Twitter">
+              <a href="#" className="text-purple-300 hover:text-purple-200 transition" aria-label="Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Instagram">
+              <a href="#" className="text-purple-300 hover:text-purple-200 transition" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-yellow-400 transition" aria-label="Email">
+              <a href="#" className="text-purple-300 hover:text-purple-200 transition" aria-label="Email">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
@@ -69,26 +69,26 @@ export default async function Footer() {
 
           {/* Categories */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Popular Categories</h3>
+            <h3 className="font-semibold text-purple-200 mb-4">Popular Categories</h3>
             <ul className="space-y-2 text-sm">
               {categories.length > 0 ? (
                 categories.map((category) => (
                   <li key={category.id}>
                     <Link 
                       href={`/categories/${category.slug}`}
-                      className="text-gray-400 hover:text-yellow-400 transition"
+                      className="text-purple-300 hover:text-purple-200 transition"
                     >
                       {category.name}
                     </Link>
               </li>
                 ))
               ) : (
-                <li className="text-gray-400">No categories available</li>
+                <li className="text-purple-300/80">No categories available</li>
               )}
               <li>
                 <Link 
                   href="/categories"
-                  className="text-gray-400 hover:text-yellow-400 transition font-medium"
+                  className="text-purple-300 hover:text-purple-200 transition font-medium"
                 >
                   View All →
                 </Link>
@@ -98,25 +98,25 @@ export default async function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
+            <h3 className="font-semibold text-purple-200 mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/about" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/about" className="text-purple-300 hover:text-purple-200 transition">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/contact" className="text-purple-300 hover:text-purple-200 transition">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/advertise" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/advertise" className="text-purple-300 hover:text-purple-200 transition">
                   Advertise
                 </Link>
               </li>
               <li>
-                <Link href="/submit-coupon" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/submit-coupon" className="text-purple-300 hover:text-purple-200 transition">
                   Submit Coupon
                 </Link>
               </li>
@@ -125,31 +125,31 @@ export default async function Footer() {
 
           {/* Stats & Legal */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Quick Stats</h3>
+            <h3 className="font-semibold text-purple-200 mb-4">Quick Stats</h3>
             <div className="space-y-3 mb-6">
               <div>
-                <div className="text-2xl font-bold text-yellow-400">{totalCoupons}+</div>
-                <div className="text-sm text-gray-400">Active Coupons</div>
+                <div className="text-2xl font-bold text-purple-300">{totalCoupons}+</div>
+                <div className="text-sm text-purple-300/90">Active Coupons</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-yellow-400">{totalStores}+</div>
-                <div className="text-sm text-gray-400">Top Stores</div>
+                <div className="text-2xl font-bold text-purple-300">{totalStores}+</div>
+                <div className="text-sm text-purple-300/90">Top Stores</div>
               </div>
             </div>
-            <h3 className="font-semibold text-white mb-4 mt-6">Legal</h3>
+            <h3 className="font-semibold text-purple-200 mb-4 mt-6">Legal</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/privacy-policy" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/privacy-policy" className="text-purple-300 hover:text-purple-200 transition">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/terms" className="text-purple-300 hover:text-purple-200 transition">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/disclaimer" className="text-gray-400 hover:text-yellow-400 transition">
+                <Link href="/disclaimer" className="text-purple-300 hover:text-purple-200 transition">
                   Disclaimer
                 </Link>
               </li>
@@ -160,17 +160,17 @@ export default async function Footer() {
         {/* Bottom */}
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-gray-400 text-center md:text-left">
+            <div className="text-sm text-purple-300/90 text-center md:text-left">
               © {new Date().getFullYear()} DealStack. All rights reserved.
             </div>
-            <div className="flex items-center gap-6 text-sm text-gray-400">
-              <Link href="/privacy-policy" className="hover:text-yellow-400 transition">
+            <div className="flex items-center gap-6 text-sm text-purple-300">
+              <Link href="/privacy-policy" className="hover:text-purple-200 transition">
                 Privacy
               </Link>
-              <Link href="/terms" className="hover:text-yellow-400 transition">
+              <Link href="/terms" className="hover:text-purple-200 transition">
                 Terms
               </Link>
-              <Link href="/contact" className="hover:text-yellow-400 transition">
+              <Link href="/contact" className="hover:text-purple-200 transition">
                 Contact
               </Link>
             </div>
