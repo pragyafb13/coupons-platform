@@ -7,9 +7,11 @@ interface SaveCouponButtonProps {
   couponId: string;
   initialSaved?: boolean;
   className?: string;
+  /** Called when save state changes (e.g. to refresh parent list on unsave) */
+  onSavedChange?: (saved: boolean) => void;
 }
 
-export default function SaveCouponButton({ couponId, initialSaved = false, className = "" }: SaveCouponButtonProps) {
+export default function SaveCouponButton({ couponId, initialSaved = false, className = "", onSavedChange }: SaveCouponButtonProps) {
   const [saved, setSaved] = useState(initialSaved);
   const [loading, setLoading] = useState(false);
 
@@ -27,6 +29,7 @@ export default function SaveCouponButton({ couponId, initialSaved = false, class
       if (res.ok) {
         const data = await res.json();
         setSaved(data.saved);
+        onSavedChange?.(data.saved);
       } else if (res.status === 401) {
         window.location.href = `/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
       }
@@ -47,8 +50,8 @@ export default function SaveCouponButton({ couponId, initialSaved = false, class
           ? "text-red-500 hover:text-red-600 bg-red-50 hover:bg-red-100"
           : "text-gray-400 hover:text-red-500 hover:bg-red-50"
       } ${className}`}
-      aria-label={saved ? "Unsave coupon" : "Save coupon"}
-      title={saved ? "Remove from saved" : "Save for later"}
+      aria-label={saved ? "Unsave (remove from saved)" : "Save coupon"}
+      title={saved ? "Click to remove from saved" : "Save for later"}
     >
       <Heart className={`h-5 w-5 ${saved ? "fill-current" : ""}`} />
     </button>
