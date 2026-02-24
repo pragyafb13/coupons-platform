@@ -39,6 +39,8 @@ export async function importCategories(formData: FormData) {
     revalidatePath("/admin/categories");
     redirect(`/admin/import/categories?imported=${count}`);
   } catch (err) {
+    const e = err as { digest?: string };
+    if (e?.digest?.startsWith("NEXT_REDIRECT")) throw err;
     console.error("Import categories error:", err);
     redirect("/admin/import/categories?error=" + encodeURIComponent(String(err)));
   }

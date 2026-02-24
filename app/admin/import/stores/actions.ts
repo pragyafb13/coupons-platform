@@ -80,6 +80,8 @@ export async function importStores(formData: FormData) {
     revalidatePath("/admin/stores");
     redirect(`/admin/import/stores?imported=${count}`);
   } catch (err) {
+    const e = err as { digest?: string };
+    if (e?.digest?.startsWith("NEXT_REDIRECT")) throw err;
     console.error("Import stores error:", err);
     redirect("/admin/import/stores?error=" + encodeURIComponent(String(err)));
   }

@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { importCategories } from "./actions";
 import ImportFeedback from "../ImportFeedback";
+import ImportSubmitButton from "../ImportSubmitButton";
 
 export default async function ImportCategoriesPage({
   searchParams,
@@ -30,9 +31,7 @@ export default async function ImportCategoriesPage({
           required
         />
 
-        <button className="bg-black text-white px-4 py-2 rounded-md">
-          Upload CSV
-        </button>
+        <ImportSubmitButton />
       </form>
     </div>
   );

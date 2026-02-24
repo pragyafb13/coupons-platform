@@ -105,6 +105,8 @@ export async function importCoupons(formData: FormData) {
     if (skipped > 0) params.set("skipped", String(skipped));
     redirect(`/admin/import/coupons?${params.toString()}`);
   } catch (err) {
+    const e = err as { digest?: string };
+    if (e?.digest?.startsWith("NEXT_REDIRECT")) throw err;
     console.error("Import coupons error:", err);
     redirect("/admin/import/coupons?error=" + encodeURIComponent(String(err)));
   }
