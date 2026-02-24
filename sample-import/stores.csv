@@ -1,21 +1,21 @@
 name,slug,logo,affiliate_url,description,is_featured,categories
-Ajio,ajio,,https://ajio.com,Latest fashion and lifestyle deals,true,fashion,clothing
-Amazon,amazon,,https://amazon.in,World's largest online store,true,electronics,grocery,books,fashion
-Flipkart,flipkart,,https://flipkart.com,India's leading e-commerce platform,true,electronics,fashion,clothing,gaming
-Myntra,myntra,,https://myntra.com,Fashion and apparel,true,fashion,clothing,footwear
-Nykaa,nykaa,,https://nykaa.com,Beauty and wellness products,true,beauty,health
-Nike,nike,,https://nike.com,Sports and footwear,true,footwear,fitness,fashion
+Ajio,ajio,,https://ajio.com,Latest fashion and lifestyle deals,true,"fashion,clothing"
+Amazon,amazon,,https://amazon.in,World's largest online store,true,"electronics,grocery,books,fashion"
+Flipkart,flipkart,,https://flipkart.com,India's leading e-commerce platform,true,"electronics,fashion,clothing,gaming"
+Myntra,myntra,,https://myntra.com,Fashion and apparel,true,"fashion,clothing,footwear"
+Nykaa,nykaa,,https://nykaa.com,Beauty and wellness products,true,"beauty,health"
+Nike,nike,,https://nike.com,Sports and footwear,true,"footwear,fitness,fashion"
 MakeMyTrip,makemytrip,,https://makemytrip.com,Travel and hotel bookings,true,fashion
 Goibibo,goibibo,,https://goibibo.com,Flight and hotel bookings,true,fashion
 BigBasket,bigbasket,,https://bigbasket.com,Grocery and essentials,true,grocery
-FirstCry,firstcry,,https://firstcry.com,Baby and kids products,true,fashion,grocery
+FirstCry,firstcry,,https://firstcry.com,Baby and kids products,true,"fashion,grocery"
 Pharmeasy,pharmeasy,,https://pharmeasy.in,Online pharmacy and healthcare,true,health
-TataCliq,tatacliq,,https://tatacliq.com,Fashion and electronics,true,electronics,fashion
-Snapdeal,snapdeal,,https://snapdeal.com,Deals across categories,false,electronics,fashion,grocery
-Paytm Mall,paytm-mall,,https://paytm.com/shop,Deals and cashback,false,electronics,fashion
-Cultfit,cultfit,,https://cult.fit,Fitness and wellness,true,fitness,health
+TataCliq,tatacliq,,https://tatacliq.com,Fashion and electronics,true,"electronics,fashion"
+Snapdeal,snapdeal,,https://snapdeal.com,Deals across categories,false,"electronics,fashion,grocery"
+Paytm Mall,paytm-mall,,https://paytm.com/shop,Deals and cashback,false,"electronics,fashion"
+Cultfit,cultfit,,https://cult.fit,Fitness and wellness,true,"fitness,health"
 Swiggy,swiggy,,https://swiggy.com,Food delivery,true,grocery
 Zomato,zomato,,https://zomato.com,Food delivery and dining,true,grocery
-Lenskart,lenskart,,https://lenskart.com,Eyewear and accessories,true,fashion,health
-Decathlon,decathlon,,https://decathlon.in,Sports and outdoor gear,true,fitness,footwear,gaming
+Lenskart,lenskart,,https://lenskart.com,Eyewear and accessories,true,"fashion,health"
+Decathlon,decathlon,,https://decathlon.in,Sports and outdoor gear,true,"fitness,footwear,gaming"
 Domino's,dominos,,https://dominos.co.in,Pizza and food delivery,true,grocery

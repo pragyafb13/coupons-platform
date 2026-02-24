@@ -20,6 +20,7 @@ export async function importCategories(formData: FormData) {
   const rows = parse(text, {
     columns: true,
     skip_empty_lines: true,
+    relax_column_count: true,
   }) as CategoryRow[];
 
   for (const row of rows) {

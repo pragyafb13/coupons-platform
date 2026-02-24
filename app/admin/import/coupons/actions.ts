@@ -15,6 +15,7 @@ export async function importCoupons(formData: FormData) {
   const rows = parse(text, {
     columns: true,
     skip_empty_lines: true,
+    relax_column_count: true,
   });
 
   for (const row of rows as any[]) {
